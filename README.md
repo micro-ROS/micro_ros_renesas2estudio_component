@@ -5,7 +5,8 @@ This tool aims to ease the micro-ROS integration in a Renesas e<sup>2</sup> stud
 ## Requeriments
 
 1. Renesas e<sup>2</sup> studio for Linux
-2. Docker
+2. Install board pack on e<sup>2</sup> studio: [Guide](.Install_packs.md).
+3. Docker
 ## How to use it
 
 micro-ROS can be used with Renesas e<sup>2</sup> studio following these steps:
@@ -17,7 +18,7 @@ micro-ROS can be used with Renesas e<sup>2</sup> studio following these steps:
 docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v ${TCINSTALL}:/toolchain -v ${workspace_loc:/${ProjName}}:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_renesas2estudio_component microros/micro_ros_static_library_builder:foxy "${cross_toolchain_flags}"
 ```
 
-3. Add micro-ROS include directory. In `Project -> Settings -> C/C++ Build -> Settings -> Tool Settings Tab -> GNU ARM Cross C Compiler -> Includes` add `micro_ros_renesas2estudio_component/libmicroros/include`
+3. Add micro-ROS include directory. In `Project -> Settings -> C/C++ Build -> Settings -> Tool Settings Tab -> GNU ARM Cross C Compiler -> Includes` add `micro_ros_renesas2estudio_component/libmicroros/include` in `Include paths (-l)`
 4. Add the micro-ROS precompiled library. In `Project -> Settings -> C/C++ Build -> Settings -> Tool Settings Tab -> GNU ARM Cross C Linker -> Libraries`
       - add `micro_ros_renesas2estudio_component/libmicroros` in `Library search path (-L)`
       - add `microros` in `Libraries (-l)`
@@ -26,8 +27,31 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
       - `extra_sources/microros_allocators.c`
       - `extra_sources/microros_transports/usb_transport.c`
       - `extra_sources/microros_transports/usb_descriptor.c`
-6. Configure `g_timer0` as an `r_gtp`.
-7. Configure `r_usb_pcpc`.
+6. Configure `g_timer0` as an `r_gpt`.
+   1. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
+   2. Filter for `timer` and enable the `r_gpt` timer:
+   
+      ![image](.images/Enable_timer.png)
+
+   3. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+   4. Go to the `Stacks` tab, then select `New Stack -> Driver -> Timers -> Timer Driver on r_gpt`.
+   5. Repeat step 3.
+
+7. Configure `r_usb_pcdc`:
+   1. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
+   2. Filter for `usb` and enable the `r_usb_basic` and `r_usb_pcdc` components:
+
+      ![image](.images/Enable_usb.png)
+
+   3. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+   4. Go to the `Stacks` tab, then select `New Stack -> Middleware -> USB -> USB PCDC driver on r_usb_pcdc`.
+   5. Repeat step 3.
+   6. Go to `Clocks` tab and configure `UCLK` clock to match 48MHz (Match the values on the highlighted boxes):
+
+      ![image](.images/Configure_usb_clock.png)
+
+   7. Repeat step 3.
+
 8. Build and run your project
 
 ## Purpose of the Project
