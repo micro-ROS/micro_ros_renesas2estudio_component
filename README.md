@@ -5,7 +5,7 @@ This tool aims to ease the micro-ROS integration in a Renesas e<sup>2</sup> stud
 ## Requeriments
 
 1. Renesas e<sup>2</sup> studio for Linux
-2. Install board pack on e<sup>2</sup> studio: [Guide](.Install_packs.md).
+2. Install board pack on e<sup>2</sup> studio: [Guide](Install_packs.md).
 3. Docker
 ## How to use it
 
