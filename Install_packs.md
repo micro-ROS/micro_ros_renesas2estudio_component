@@ -2,7 +2,7 @@
 
 ## Download
 
-- Download the latest FSP packs zip from the renesas repository: https://github.com/renesas/fsp/releases. In our case: [FSP_Packs_v2.4.0.zip](https://github.com/renesas/fsp/releases/download/v2.4.0/FSP_Packs_v2.4.0.zip)
+- Download the latest FSP packs zip from the renesas repository: https://github.com/renesas/fsp/releases. For example: [FSP_Packs_v2.4.0.zip](https://github.com/renesas/fsp/releases/download/v2.4.0/FSP_Packs_v2.4.0.zip)
 
 ## Install FSP packs
 
@@ -27,4 +27,3 @@ Note: Check the permissions on this folder, Renesas e<sup>2</sup> studio will ne
 3. Click on Browse and select the compiler extracted folder, the compiler should be detected automatically:
 
 ![image](.images/Compiler_install.png)
-
