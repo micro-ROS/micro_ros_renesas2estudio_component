@@ -38,7 +38,15 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
    5. Save the modification using `ctrl + s` and click on `Generate Project Content`.
 
 7. Configure the transport: [Detail](##Micro-XRCE-DDS-transport-configuration)
-8. Build and run your project
+8. Configure the Main stack and Heap size:
+   1. On the `configuration.xml` menu, go to the `BSP` tab.
+   2. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000:
+
+      ![image](.images/Configure_memory.png)
+
+   3. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+
+9. Build and run your project
 
 ## Micro XRCE-DDS transport configuration
 ### USB transport
