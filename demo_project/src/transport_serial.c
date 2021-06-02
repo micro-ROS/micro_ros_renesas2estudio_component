@@ -75,7 +75,7 @@ bool renesas_e2_transport_close(struct uxrCustomTransport * transport){
     return true;
 }
 
-size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, uint8_t * buf, size_t len, uint8_t * error){
+size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * error){
     (void) transport;
     (void) error;
     g_write_complete = false;

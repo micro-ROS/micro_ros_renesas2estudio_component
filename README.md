@@ -30,7 +30,7 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
 6. Configure `g_timer0` as an `r_gpt`.
    1. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
    2. Filter for `timer` and enable the `r_gpt` timer:
-   
+
       ![image](.images/Enable_timer.png)
 
    3. Go to the `Stacks` tab, then select `New Stack -> Driver -> Timers -> Timer Driver on r_gpt`.
@@ -66,7 +66,7 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
 ### Serial transport
 1. Copy the `transport_serial.c` file to the source directory.
 2. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
-3. Filter for `uart` and enable the `r_src_uart` component.
+3. Filter for `uart` and enable the `r_sci_uart` component.
 4. Go to the `Stacks` tab, then select `New Stack -> Driver -> Connectivity -> r_src_uart`.
 5. Go to the component properties and configure the Tx/Rx pinout:
 
