@@ -103,7 +103,6 @@ size_t handle_usb(handle_usb_operation_t op, uint8_t * buf, size_t len, int time
                 break;
             case USB_STATUS_SUSPEND:
             case USB_STATUS_DETACH:
-                break;
             default:
                 break;
         }
