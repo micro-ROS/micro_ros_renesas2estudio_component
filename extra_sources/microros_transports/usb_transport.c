@@ -117,7 +117,6 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     (void) transport;
 
     R_USB_Open(&g_basic0_ctrl, &g_basic0_cfg);
-    // return 0 == handle_usb(USB_WRITE, (uint8_t *) " ", 1, 100);
     return true;
 }
 
