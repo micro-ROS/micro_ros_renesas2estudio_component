@@ -1,10 +1,10 @@
 #include <time.h>
 #include "hal_data.h"
 
-#define NS_TO_S 1000000000UL
+#define NS_IN_S 1000000000UL
 
 #define MICRO_ROS_TIMER g_timer0
-#define MICRO_ROS_TIMER_CLK_SOURCE BSP_STARTUP_PCLKB_HZ
+#define MICRO_ROS_TIMER_CLK_SOURCE_HZ BSP_STARTUP_PCLKB_HZ
 
 #define MICRO_ROS_ADD_SUFFIX_I(X,Y) X##_##Y
 #define MICRO_ROS_ADD_SUFFIX(X,Y) MICRO_ROS_ADD_SUFFIX_I(X,Y)
@@ -33,7 +33,7 @@ int clock_gettime( int clock_id, struct timespec * tp )
         R_AGT_Open(&MICRO_ROS_TIMER_CTRL, &MICRO_ROS_TIMER_CFG);
         R_AGT_Start(&MICRO_ROS_TIMER_CTRL);
 
-        ns_per_tick = (uint64_t)(NS_TO_S * (((double)(1 << MICRO_ROS_TIMER_CFG.source_div)/(double)MICRO_ROS_TIMER_CLK_SOURCE)));
+        ns_per_tick = (uint64_t)(NS_IN_S * (((double)(1 << MICRO_ROS_TIMER_CFG.source_div)/(double)MICRO_ROS_TIMER_CLK_SOURCE_HZ)));
         ns_per_period = MICRO_ROS_TIMER_CFG.period_counts * ns_per_tick;
 
         timer_init = true;
@@ -43,12 +43,12 @@ int clock_gettime( int clock_id, struct timespec * tp )
     R_AGT_StatusGet(&MICRO_ROS_TIMER_CTRL, &status);
 
     uint64_t ns = (uint64_t) (MICRO_ROS_TIMER_CFG.period_counts - status.counter) * ns_per_tick;
-    tp->tv_sec = (long int)((ns / NS_TO_S));
-    tp->tv_nsec = (long int)(ns % NS_TO_S);
+    tp->tv_sec = (long int)((ns / NS_IN_S));
+    tp->tv_nsec = (long int)(ns % NS_IN_S);
 
     uint64_t rollover_ns = (uint64_t) (rollover_count * ns_per_period);
-    tp->tv_sec += (long int)((rollover_ns / NS_TO_S));
-    tp->tv_nsec += (long int)(rollover_ns % NS_TO_S);
+    tp->tv_sec += (long int)((rollover_ns / NS_IN_S));
+    tp->tv_nsec += (long int)(rollover_ns % NS_IN_S);
 
 
     return 0;
