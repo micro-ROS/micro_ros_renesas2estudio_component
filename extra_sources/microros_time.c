@@ -2,7 +2,7 @@
 #include "hal_data.h"
 
 #define NS_TO_S 1000000000UL
-#define NS_PER_TICK 3906250UL
+#define NS_PER_TICK 640UL
 #define COUNTER_16BITS 65535UL
 int clock_gettime( int clock_id, struct timespec * tp );
 static bool gtp_init = false;
@@ -45,11 +45,11 @@ static bool gtp_init = false;
 // }
 
 
-static uint64_t rollover_extra_s = 0;
+static uint64_t rollover_count = 0;
 
-void timer1_irq(timer_callback_args_t * p_args){
+void micro_ros_timer_cb(timer_callback_args_t * p_args){
     (void) p_args;
-    rollover_extra_s += 256UL;
+    rollover_count++;
 }
 
 int clock_gettime( int clock_id, struct timespec * tp )
@@ -66,8 +66,13 @@ int clock_gettime( int clock_id, struct timespec * tp )
     R_AGT_StatusGet(&g_timer1_ctrl, &status);
 
     uint64_t ns = (uint64_t) (COUNTER_16BITS - status.counter) * NS_PER_TICK;
-    tp->tv_sec = (long int)(rollover_extra_s + (ns / NS_TO_S));
-    tp->tv_nsec = (long int)(ns % NS_TO_S);
+    tp->tv_sec = (long int)((ns / NS_TO_S)); // This is always zero
+    tp->tv_nsec = (long int)(ns % NS_TO_S);  // This is always ns
+
+    uint64_t rollover_ns = (uint64_t) (rollover_count * COUNTER_16BITS * NS_PER_TICK);
+    tp->tv_sec += (long int)((rollover_ns / NS_TO_S));
+    tp->tv_nsec += (long int)(rollover_ns % NS_TO_S);
+
 
     return 0;
 }

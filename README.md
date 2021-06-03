@@ -25,17 +25,28 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
 5. Add the following source code files to your project, dragging them to source folder:
       - `extra_sources/microros_time.c`
       - `extra_sources/microros_allocators.c`
-      - `extra_sources/microros_transports/usb_transport.c`
-      - `extra_sources/microros_transports/usb_descriptor.c`
-6. Configure `g_timer0` as an `r_gpt`.
+      - `extra_sources/microros_allocators.h`
+      - `extra_sources/microros_transports.h`
+
+6. Configure `g_timer0` as an `r_agt`.
    1. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
-   2. Filter for `timer` and enable the `r_gpt` timer:
+   2. Filter for `timer` and enable the `r_agt` timer:
 
       ![image](.images/Enable_timer.png)
 
-   3. Go to the `Stacks` tab, then select `New Stack -> Driver -> Timers -> Timer Driver on r_gpt`.
-   4. Modify the clock period on the component properties (`Module g_timer0 Timer Driver on r_gpt -> General -> Period`) to `0x40000000000`
-   5. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+   3. Go to the `Stacks` tab, then select `New Stack -> Driver -> Timers -> Timer Driver on r_agt`.
+   4. Modify the clock period on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Period`) to `0x800000`
+   5. Modify the count source on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Count Source`) to `PCLKB`
+   6. Modify the interrupt callback on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Callback`) to `micro_ros_timer_cb`
+   7. Modify the underflow interrupt priority on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Underflow Interrupt Priority`) to `Priority 15`
+
+      ![image](.images/Timer_configuration.png)
+
+   8. Make sure that PCLKB is set to 12500 kHz in `Clocks` tab:
+
+      ![image](.images/Configure_timer_clock.png)
+
+   9.  Save the modification using `ctrl + s` and click on `Generate Project Content`.
 
 7. Configure the transport: [Detail](##Micro-XRCE-DDS-transport-configuration)
 8. Configure the Main stack and Heap size:
@@ -46,11 +57,13 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
 
    3. Save the modification using `ctrl + s` and click on `Generate Project Content`.
 
-9. Build and run your project
+9.  Build and run your project
 
 ## Micro XRCE-DDS transport configuration
 ### USB transport
-1. Copy the `transport_usb.c` file to the source directory.
+1. Copy the following files file to the source directory:
+      - `extra_sources/microros_transports/usb_transport.c`
+      - `extra_sources/microros_transports/usb_descriptor.c`
 2. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
 3. Filter for `usb` and enable the `r_usb_basic` and `r_usb_pcdc` components:
 
@@ -64,7 +77,8 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
 6. Save the modification using `ctrl + s` and click on `Generate Project Content`.
 
 ### Serial transport
-1. Copy the `transport_serial.c` file to the source directory.
+1. Copy the following files file to the source directory:
+      - `extra_sources/microros_transports/uart_transport.c`
 2. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
 3. Filter for `uart` and enable the `r_sci_uart` component.
 4. Go to the `Stacks` tab, then select `New Stack -> Driver -> Connectivity -> r_src_uart`.
@@ -73,15 +87,6 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
    ![image](.images/Configure_serial.png)
 
 6. Save the modification using `ctrl + s` and click on `Generate Project Content`.
-
-## Purpose of the Project
-
-This software is not ready for production use. It has neither been developed nor
-tested for a specific use case. However, the license conditions of the
-applicable Open Source licenses allow you to adapt the software to your needs.
-Before using it in a safety relevant setting, make sure that the software
-fulfills your requirements and adjust it according to any applicable safety
-standards, e.g., ISO 26262.
 
 ## License
 
