@@ -11,8 +11,6 @@
 #include <uxr/client/util/time.h>
 #include <rmw_microxrcedds_c/config.h>
 
-#include "./leds.h"
-
 #ifdef RMW_UXRCE_TRANSPORT_CUSTOM
 
 // Renesas FSP USB-PCDC handling
