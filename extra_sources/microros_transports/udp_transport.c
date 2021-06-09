@@ -1,8 +1,6 @@
 #include "hal_data.h"
 
 #include <uxr/client/transport.h>
-//#include <uxr/client/util/time.h>
-
 #include <rmw_microxrcedds_c/config.h>
 
 #include <unistd.h>
@@ -23,8 +21,10 @@ uint8_t g_ip0_arp_cache_memory[G_IP0_ARP_CACHE_SIZE] BSP_ALIGN_VARIABLE(4);
 // Stack memory for g_ip0 Packet pool.
 uint8_t g_packet_pool0_pool_memory[G_PACKET_POOL0_PACKET_NUM * (G_PACKET_POOL0_PACKET_SIZE + sizeof(NX_PACKET))] BSP_ALIGN_VARIABLE(4) ETHER_BUFFER_PLACE_IN_SECTION;
 
+// Configure micro-ROS agent IP and port
 #define UDP_SERVER_PORT          8888
 #define UDP_SERVER_ADDRESS       IP_ADDRESS(192, 168, 1, 185)
+
 #define LINK_ENABLE_WAIT_TIME (1000U)
 
 // TODO: Check conflict with g_packet_pool0 packet number
