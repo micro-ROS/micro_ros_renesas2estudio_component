@@ -88,6 +88,26 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
 
 6. Save the modification using `ctrl + s` and click on `Generate Project Content`.
 
+### UDP transport (ThreadX)
+1. Copy the following files file to the source directory:
+      - `extra_sources/microros_transports/udp_transport.c`
+
+2. Configure the micro-ROS Agent IP and port on the `udp_transport.c` file:
+
+   ![image](.images/Configure_UDP.png)
+
+3. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
+4. Go to the `Stacks` tab, then select `New Stack -> Azure RTOS -> NetX Duo -> NetX Duo IP instance`.
+5. Go to the component properties and configure the board network parameters:
+
+   ![image](.images/Configure_network.png)
+
+6. Select the Ethernet Driver module `g_ether0` and set the board MAC address on `Module g_ether0 Ethernet Driver on r_ether -> General -> MAC address`.
+
+   ![image](.images/Configure_ethernet.png)
+
+7.  Save the modification using `ctrl + s` and click on `Generate Project Content`.
+
 ## License
 
 This repository is open-sourced under the Apache-2.0 license. See the [LICENSE](LICENSE) file for details.
