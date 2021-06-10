@@ -2,6 +2,7 @@
 
 #include <uxr/client/transport.h>
 #include <rmw_microxrcedds_c/config.h>
+#include <microros_transports.h>
 
 #include <unistd.h>
 #include <stdio.h>

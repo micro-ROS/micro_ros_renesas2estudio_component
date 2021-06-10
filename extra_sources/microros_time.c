@@ -1,7 +1,12 @@
 #include <time.h>
-#include "hal_data.h"
+#include "r_agt.h"
+#include "r_timer_api.h"
 
 #define NS_IN_S 1000000000UL
+
+extern const timer_instance_t g_timer0;
+extern agt_instance_ctrl_t g_timer0_ctrl;
+extern const timer_cfg_t g_timer0_cfg;
 
 #define MICRO_ROS_TIMER g_timer0
 #define MICRO_ROS_TIMER_CLK_SOURCE_HZ BSP_STARTUP_PCLKB_HZ
