@@ -55,9 +55,35 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
 
       ![image](.images/Configure_memory.png)
 
+      Note: If using an RTOS, the stack size should be configured individually for each thread.
+
    3. Save the modification using `ctrl + s` and click on `Generate Project Content`.
 
 9.  Build and run your project
+
+## ThreadX RTOS
+
+Instructions for using micro-ROS on Renesas e<sup>2</sup> studio ThreadX projects.
+
+1. Create a thread to run micro-ROS:
+   1. Double click on the `configuration.xml` file of your project, go to the `Stacks` tab and click on `New Thread`.
+   2. On the new thread properties, set the Symbol name `Thread -> Symbol` to `thread_microros` and the thread stack to 5000.
+
+      ![image](.images/Thread_conf.png)
+
+   3. Change ThreadX timer from 100 to 1000 ticks per second inside the thread properties `Common -> Timer -> Timer Ticks Per Second`
+
+      ![image](.images/Thread_timer.png)
+
+   4. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+   5. Check that the file `thread_microros_entry.c` has been created on the project source directory.
+
+2. Follow the timer (`g_timer0`) and transport configurations of the [previous chapter](##Micro-XRCE-DDS-transport-configuration), adding the components on the created thread:
+   
+   ![image](.images/Thread_completed.png)
+
+3. Include your micro-ROS code inside the thread main function `thread_microros_entry` of the created file `thread_microros_entry.c`, [example](demo_project_threadx/src/thread_microros_entry.c). 
+4. Build and run your project.
 
 ## Micro XRCE-DDS transport configuration
 ### USB transport
@@ -96,7 +122,7 @@ docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v
 
    ![image](.images/Configure_UDP.png)
 
-3. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
+3. Double click on the `configuration.xml` file of your project.
 4. Go to the `Stacks` tab, then select `New Stack -> Azure RTOS -> NetX Duo -> NetX Duo IP instance`.
 5. Go to the component properties and configure the board network parameters:
 
