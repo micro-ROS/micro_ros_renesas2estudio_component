@@ -77,7 +77,7 @@ $(INSTALL_DIR)/micro_ros_src/install: $(INSTALL_DIR)/toolchain.cmake $(INSTALL_D
 	colcon build \
 		--merge-install \
 		--packages-ignore-regex=.*_cpp \
-		--metas $(COMPONENT_DIR)/colcon.meta $(APP_COLCON_META) \
+		--metas $(COMPONENT_DIR)/colcon.meta $(COMPONENT_DIR)/../../app_colcon.met \
 		--cmake-force-configure \
 		--cmake-clean-cache \
 		--cmake-args \
