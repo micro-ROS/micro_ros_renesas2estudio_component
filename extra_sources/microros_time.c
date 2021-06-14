@@ -1,39 +1,55 @@
 #include <time.h>
 #include "hal_data.h"
 
+#define NS_IN_S 1000000000UL
+
+#define MICRO_ROS_TIMER g_timer0
+#define MICRO_ROS_TIMER_CLK_SOURCE_HZ BSP_STARTUP_PCLKB_HZ
+
+#define MICRO_ROS_ADD_SUFFIX_I(X,Y) X##_##Y
+#define MICRO_ROS_ADD_SUFFIX(X,Y) MICRO_ROS_ADD_SUFFIX_I(X,Y)
+
+#define MICRO_ROS_TIMER_CFG MICRO_ROS_ADD_SUFFIX(MICRO_ROS_TIMER,cfg)
+#define MICRO_ROS_TIMER_CTRL MICRO_ROS_ADD_SUFFIX(MICRO_ROS_TIMER,ctrl)
+
 int clock_gettime( int clock_id, struct timespec * tp );
 
-#define micro_rollover_useconds 4294967295
+static bool timer_init = false;
+static uint64_t rollover_count = 0;
 
-static bool gtp_init = false;
+void micro_ros_timer_cb(timer_callback_args_t * p_args){
+    (void) p_args;
+    rollover_count++;
+}
 
 int clock_gettime( int clock_id, struct timespec * tp )
 {
     (void)clock_id;
 
-    if (!gtp_init){
-        R_BSP_MODULE_START(FSP_IP_POEG, 0U);
-        (void) R_GPT_Open(&g_timer0_ctrl, &g_timer0_cfg);
-        (void) R_GPT_Start(&g_timer0_ctrl);
-        gtp_init = true;
+    static uint64_t ns_per_tick;
+    static uint64_t ns_per_period;
+
+    if (!timer_init){
+        R_AGT_Open(&MICRO_ROS_TIMER_CTRL, &MICRO_ROS_TIMER_CFG);
+        R_AGT_Start(&MICRO_ROS_TIMER_CTRL);
+
+        ns_per_tick = (uint64_t)(NS_IN_S * (((double)(1 << MICRO_ROS_TIMER_CFG.source_div)/(double)MICRO_ROS_TIMER_CLK_SOURCE_HZ)));
+        ns_per_period = MICRO_ROS_TIMER_CFG.period_counts * ns_per_tick;
+
+        timer_init = true;
     }
 
     timer_status_t status;
-    (void) R_GPT_StatusGet(&g_timer0_ctrl, &status);
+    R_AGT_StatusGet(&MICRO_ROS_TIMER_CTRL, &status);
 
-    static uint32_t rollover = 0;
-    static int64_t last_measure = 0;
+    uint64_t ns = (uint64_t) (MICRO_ROS_TIMER_CFG.period_counts - status.counter) * ns_per_tick;
+    tp->tv_sec = (long int)((ns / NS_IN_S));
+    tp->tv_nsec = (long int)(ns % NS_IN_S);
 
-    int64_t m = (int64_t) status.counter * 10;
-    tp->tv_sec = m / 1000000;
-    tp->tv_nsec = (long int)(m % 1000000) * 1000;
+    uint64_t rollover_ns = (uint64_t) (rollover_count * ns_per_period);
+    tp->tv_sec += (long int)((rollover_ns / NS_IN_S));
+    tp->tv_nsec += (long int)(rollover_ns % NS_IN_S);
 
-    // Rollover handling
-    rollover += (m < last_measure) ? 1 : 0;
-    int64_t rollover_extra_us = rollover * micro_rollover_useconds;
-    tp->tv_sec += (long int) rollover_extra_us / 1000000;
-    tp->tv_nsec += (long int)(rollover_extra_us % 1000000) * 1000;
-    last_measure = m;
 
     return 0;
 }

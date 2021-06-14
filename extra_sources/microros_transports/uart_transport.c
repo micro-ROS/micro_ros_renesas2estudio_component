@@ -1,24 +1,17 @@
-#include "hal_data.h"
-
-#include <uxr/client/transport.h>
-#include <uxr/client/util/time.h>
-
-#include <rmw_microxrcedds_c/config.h>
+#include <microros_transports.h>
 
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 
+#include <hal_data.h>
+
+#include <uxr/client/transport.h>
+#include <uxr/client/util/time.h>
+#include <rmw_microxrcedds_c/config.h>
+
 #ifdef RMW_UXRCE_TRANSPORT_CUSTOM
-
-bool renesas_e2_transport_open(struct uxrCustomTransport * transport);
-bool renesas_e2_transport_close(struct uxrCustomTransport * transport);
-size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, uint8_t * buf, size_t len, uint8_t * err);
-size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err);
-
-#define NUM_STRING_DESCRIPTOR   (7U)             /* String descriptor */
-#define READ_BUF_SIZE           (8U)
 
 // --- micro-ROS Transports ---
 #define UART_IT_BUFFER_SIZE 2048
@@ -55,29 +48,21 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
 
     fsp_err_t err = R_SCI_UART_Open(&g_uart0_ctrl, &g_uart0_cfg);
 
-    if (err != FSP_SUCCESS)
-    {
-        return 0;
-    }
-
-    return 1;
+    return err == FSP_SUCCESS;
 }
 
 bool renesas_e2_transport_close(struct uxrCustomTransport * transport){
     (void) transport;
+
     fsp_err_t err = R_SCI_UART_Close(&g_uart0_ctrl);
 
-    if (err != FSP_SUCCESS)
-    {
-        return 0;
-    }
-
-    return true;
+    return err == FSP_SUCCESS;
 }
 
-size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, uint8_t * buf, size_t len, uint8_t * error){
+size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * error){
     (void) transport;
     (void) error;
+
     g_write_complete = false;
     fsp_err_t err = R_SCI_UART_Write(&g_uart0_ctrl, buf, len);
 
@@ -86,13 +71,8 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, uint8_t 
         return 0;
     }
 
-    while(true)
+    while(!g_write_complete)
     {
-        if(g_write_complete)
-        {
-            break;
-        }
-
         R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
     }
 
@@ -102,6 +82,7 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, uint8_t 
 size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* error){
     (void) transport;
     (void) error;
+
     int64_t start = uxr_millis();
     size_t wrote = 0;
 
