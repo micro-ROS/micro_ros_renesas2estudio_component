@@ -32,12 +32,12 @@ $(INSTALL_DIR)/toolchain.cmake: $(COMPONENT_DIR)/toolchain.cmake.in
 $(INSTALL_DIR)/micro_ros_dev/install:
 	rm -rf $(INSTALL_DIR)/micro_ros_dev; \
 	mkdir $(INSTALL_DIR)/micro_ros_dev; cd $(INSTALL_DIR)/micro_ros_dev; \
-	git clone -b galactic https://github.com/ament/ament_cmake src/ament_cmake; \
-	git clone -b galactic https://github.com/ament/ament_lint src/ament_lint; \
-	git clone -b galactic https://github.com/ament/ament_package src/ament_package; \
-	git clone -b galactic https://github.com/ament/googletest src/googletest; \
-	git clone -b galactic https://github.com/ros2/ament_cmake_ros src/ament_cmake_ros; \
-	git clone -b galactic https://github.com/ament/ament_index src/ament_index; \
+	git clone -b foxy https://github.com/ament/ament_cmake src/ament_cmake; \
+	git clone -b foxy https://github.com/ament/ament_lint src/ament_lint; \
+	git clone -b foxy https://github.com/ament/ament_package src/ament_package; \
+	git clone -b foxy https://github.com/ament/googletest src/googletest; \
+	git clone -b foxy https://github.com/ros2/ament_cmake_ros src/ament_cmake_ros; \
+	git clone -b foxy https://github.com/ament/ament_index src/ament_index; \
 	colcon build --cmake-args -DBUILD_TESTING=OFF;
 
 $(INSTALL_DIR)/micro_ros_src/src:

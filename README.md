@@ -14,28 +14,23 @@ micro-ROS can be used with Renesas e<sup>2</sup> studio following these steps:
 1. Clone this repository in your Renesas e<sup>2</sup> studio project folder
 2. Go to `Project -> Properties -> C/C++ Build -> Settings -> Build Steps Tab` and in `Pre-build steps` add:
 
-```bash
-docker pull microros/micro_ros_static_library_builder:foxy && docker run --rm -v ${TCINSTALL}:/toolchain -v ${workspace_loc:/${ProjName}}:/project --env MICROROS_LIBRARY_FOLDER=micro_ros_renesas2estudio_component microros/micro_ros_static_library_builder:foxy "${cross_toolchain_flags}"
-```
-
-or
 
 ```bash
 cd ../micro_ros_renesas2estudio_component/library_generation && ./library_generation.sh "${cross_toolchain_flags}"
 ```
 
 
-3. Add micro-ROS include directory. In `Project -> Settings -> C/C++ Build -> Settings -> Tool Settings Tab -> GNU ARM Cross C Compiler -> Includes` add `"${workspace_loc:/${ProjName}/micro_ros_renesas2estudio_component/libmicroros/include}"` in `Include paths (-l)`
-4. Add the micro-ROS precompiled library. In `Project -> Settings -> C/C++ Build -> Settings -> Tool Settings Tab -> GNU ARM Cross C Linker -> Libraries`
+1. Add micro-ROS include directory. In `Project -> Settings -> C/C++ Build -> Settings -> Tool Settings Tab -> GNU ARM Cross C Compiler -> Includes` add `"${workspace_loc:/${ProjName}/micro_ros_renesas2estudio_component/libmicroros/include}"` in `Include paths (-l)`
+2. Add the micro-ROS precompiled library. In `Project -> Settings -> C/C++ Build -> Settings -> Tool Settings Tab -> GNU ARM Cross C Linker -> Libraries`
       - add `"${workspace_loc:/${ProjName}/micro_ros_renesas2estudio_component/libmicroros}"` in `Library search path (-L)`
       - add `microros` in `Libraries (-l)`
-5. Add the following source code files to your project, dragging them to source folder:
+3. Add the following source code files to your project, dragging them to source folder:
       - `extra_sources/microros_time.c`
       - `extra_sources/microros_allocators.c`
       - `extra_sources/microros_allocators.h`
       - `extra_sources/microros_transports.h`
 
-6. Configure `g_timer0` as an `r_agt`.
+4. Configure `g_timer0` as an `r_agt`.
    1. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
    2. Filter for `timer` and enable the `r_agt` timer:
 
@@ -55,8 +50,8 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
    9.  Save the modification using `ctrl + s` and click on `Generate Project Content`.
 
-7. Configure the transport: [Detail](##Micro-XRCE-DDS-transport-configuration)
-8. Configure the Main stack and Heap size:
+5. Configure the transport: [Detail](##Micro-XRCE-DDS-transport-configuration)
+6. Configure the Main stack and Heap size:
    1. On the `configuration.xml` menu, go to the `BSP` tab.
    2. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000:
 
@@ -64,7 +59,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
    3. Save the modification using `ctrl + s` and click on `Generate Project Content`.
 
-9.  Build and run your project
+7.  Build and run your project
 
 ## Micro XRCE-DDS transport configuration
 ### USB transport
