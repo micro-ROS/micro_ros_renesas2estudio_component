@@ -49,6 +49,11 @@ typedef enum handle_usb_operation_t {
 } handle_usb_operation_t;
 
 size_t handle_usb(handle_usb_operation_t op, uint8_t * buf, size_t len, int timeout);
+
+uint8_t reading_buffer[1000];
+size_t reading_buffer_size = 0;
+size_t reading_buffer_ptr;
+
 size_t handle_usb(handle_usb_operation_t op, uint8_t * buf, size_t len, int timeout)
 {
     usb_status_t event = {0};
@@ -57,7 +62,7 @@ size_t handle_usb(handle_usb_operation_t op, uint8_t * buf, size_t len, int time
     if(op == USB_WRITE){
         err = R_USB_Write(&g_basic0_ctrl, buf, len, (uint8_t)g_usb_class_type);
     } else if (op == USB_READ) {
-        err = R_USB_Read(&g_basic0_ctrl, buf, len, (uint8_t)g_usb_class_type);
+        err = R_USB_Read(&g_basic0_ctrl, reading_buffer, sizeof(reading_buffer), (uint8_t)g_usb_class_type);
     }
 
     int64_t start = uxr_millis();
@@ -135,7 +140,25 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
     (void) transport;
     (void) error;
 
-    return handle_usb(USB_READ, buf, len, timeout);
+    size_t readed = 0;
+
+    if (reading_buffer_size == 0) {
+        reading_buffer_size = handle_usb(USB_READ, NULL, 0, timeout);
+        reading_buffer_ptr = 0;
+    }
+
+    while (reading_buffer_ptr < reading_buffer_size && readed < len) {
+        buf[readed] = reading_buffer[reading_buffer_ptr];
+        reading_buffer_ptr++;
+        readed++;
+    }
+
+    if (reading_buffer_ptr == reading_buffer_size)
+    {
+        reading_buffer_size = 0;
+    }
+
+    return readed;
 }
 
 #endif //RMW_UXRCE_TRANSPORT_CUSTOM
