@@ -12,16 +12,13 @@
 
 [![ ](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/ci_galactic.yml/badge.svg?branch=foxy)](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/ci_galactic.yml)
 
-
-TODO: AGENT
-TODO: Architecture
-
 This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio). This components targets [Renesas RA family](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus), an ARM Cortex-M based MCU series, enabling a full micro-ROS compatibility for developing robotics and IoT applications.
 
 - [micro-ROS for Renesas e<sup>2</sup> studio](#micro-ros-for-renesas-esup2sup-studio)
   - [Supported platorms](#supported-platorms)
-  - [Requeriments](#requeriments)
+  - [Requirements](#requirements)
   - [Getting started](#getting-started)
+  - [Using the micro-ROS Agent](#using-the-micro-ros-agent)
   - [Integrating micro-ROS in your project](#integrating-micro-ros-in-your-project)
   - [License](#license)
   - [Known Issues / Limitations](#known-issues--limitations)
@@ -33,7 +30,7 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | [RA6M5](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus/ra6m5-200mhz-arm-cortex-m33-trustzone-highest-integration-ethernet-and-can-fd) | RA Series | [EK-RA6M5](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus/ek-ra6m5-evaluation-kit-ra6m5-mcu-group) |
 
-## Requeriments
+## Requirements
 
 1. [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio) for Linux<sup>1</sup>
 2. FSP board packs for Renesas e<sup>2</sup> studio: [Details](fps_install_packs.md).
@@ -43,6 +40,22 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
 
 TODO: Link to a repo with example projects
 
+## Using the micro-ROS Agent
+
+Is possible to use a **micro-ROS Agent** just with this docker command:
+
+```bash
+# UDPv4 micro-ROS Agent
+docker run -it --rm -v /dev:/dev -v /dev/shm:/dev/shm --privileged --net=host microros/micro-ros-agent:$ROS_DISTRO udp4 --port 8888 -v6
+
+# Serial micro-ROS Agent
+docker run -it --rm -v /dev:/dev -v /dev/shm:/dev/shm --privileged --net=host microros/micro-ros-agent:$ROS_DISTRO serial --dev [YOUR BOARD PORT] -v6
+```
+
+There are some other options for using the micro-ROS Agent:
+ - Building it in a ROS 2 environment: [Details](https://micro.ros.org/docs/tutorials/core/first_application_linux/).
+ - Using a [snap package](https://snapcraft.io/micro-ros-agent).
+
 ## Integrating micro-ROS in your project
 
 micro-ROS can be integrated with a Renesas e<sup>2</sup> studio project following these steps:
@@ -51,11 +64,9 @@ micro-ROS can be integrated with a Renesas e<sup>2</sup> studio project followin
 
 2. Go to `Project -> Properties -> C/C++ Build -> Settings -> Build Steps Tab` and in `Pre-build steps` add:
 
-
 ```bash
 cd ../micro_ros_renesas2estudio_component/library_generation && ./library_generation.sh "${cross_toolchain_flags}"
 ```
-
 
 3. Add <b>micro-ROS include directory</b>.
    <details>
@@ -66,8 +77,6 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
       - add `"${workspace_loc:/${ProjName}/micro_ros_renesas2estudio_component/libmicroros/include}"` in `Include paths (-l)`
 
    </details>
-
-
 
 4. Add the **micro-ROS precompiled library**.
    <details>
