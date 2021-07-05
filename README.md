@@ -19,13 +19,13 @@ TODO: Architecture
 This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio). This components targets [Renesas RA family](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus), an ARM Cortex-M based MCU series, enabling a full micro-ROS compatibility for developing robotics and IoT applications.
 
 - [micro-ROS for Renesas e<sup>2</sup> studio](#micro-ros-for-renesas-esup2sup-studio)
-  - [- Known Issues/Limitations](#--known-issueslimitations)
   - [Supported platorms](#supported-platorms)
   - [Requeriments](#requeriments)
   - [Getting started](#getting-started)
   - [Integrating micro-ROS in your project](#integrating-micro-ros-in-your-project)
   - [License](#license)
-  - [Known Issues/Limitations](#known-issueslimitations)
+  - [Known Issues / Limitations](#known-issues--limitations)
+
 ---
 ## Supported platorms
 
@@ -36,7 +36,7 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
 ## Requeriments
 
 1. [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio) for Linux<sup>1</sup>
-2. FSP board packs for Renesas e<sup>2</sup> studio: [Guide](fps_install_packs.md).
+2. FSP board packs for Renesas e<sup>2</sup> studio: [Details](fps_install_packs.md).
 
 *<sup>1</sup> Currently only support for Linux is available*
 ## Getting started
@@ -47,7 +47,7 @@ TODO: Link to a repo with example projects
 
 micro-ROS can be integrated with a Renesas e<sup>2</sup> studio project following these steps:
 
-1. Clone this repository in your Renesas e<sup>2</sup> studio project folder.
+1. Clone this repository in your **Renesas e<sup>2</sup> studio project** folder.
 
 2. Go to `Project -> Properties -> C/C++ Build -> Settings -> Build Steps Tab` and in `Pre-build steps` add:
 
@@ -133,7 +133,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
 9.  Configure the **micro-ROS transports**: [Details](micro_ros_transports.md)
 
-10. Build and run your project
+10. **Build and run** your project
 ## License
 
 This repository is open-sourced under the Apache-2.0 license. See the [LICENSE](LICENSE) file for details.
@@ -141,6 +141,6 @@ This repository is open-sourced under the Apache-2.0 license. See the [LICENSE](
 For a list of other open-source components included in this repository,
 see the file [3rd-party-licenses.txt](3rd-party-licenses.txt).
 
-## Known Issues/Limitations
+## Known Issues / Limitations
 
 There are no known limitations.
