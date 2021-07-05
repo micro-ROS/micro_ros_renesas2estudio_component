@@ -1,3 +1,4 @@
+<br/>
 <a href="https://www.zephyrproject.org">
    <p align="center">
       <img width="40%" src=".images/renesas_logo.gif">

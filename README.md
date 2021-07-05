@@ -13,6 +13,9 @@
 [![ ](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/ci_galactic.yml/badge.svg?branch=foxy)](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/ci_galactic.yml)
 
 
+TODO: AGENT
+TODO: Architecture
+
 This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio). This components targets [Renesas RA family](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus), an ARM Cortex-M based MCU series, enabling a full micro-ROS compatibility for developing robotics and IoT applications.
 
 - [micro-ROS for Renesas e<sup>2</sup> studio](#micro-ros-for-renesas-esup2sup-studio)
@@ -21,9 +24,6 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
   - [Requeriments](#requeriments)
   - [Getting started](#getting-started)
   - [Integrating micro-ROS in your project](#integrating-micro-ros-in-your-project)
-  - [Micro XRCE-DDS transport configuration](#micro-xrce-dds-transport-configuration)
-    - [USB transport](#usb-transport)
-    - [Serial transport](#serial-transport)
   - [License](#license)
   - [Known Issues/Limitations](#known-issueslimitations)
 ---
@@ -36,7 +36,7 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
 ## Requeriments
 
 1. [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio) for Linux <sup>*</sup>
-2. FSP board packs for Renesas e<sup>2</sup> studio: [Guide](Install_packs.md).
+2. FSP board packs for Renesas e<sup>2</sup> studio: [Guide](fps_install_packs.md).
 
 <small><sup>*</sup>Currently only support for Linux is avaible</small>
 
@@ -132,39 +132,9 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
       TODO
    </details>
 
-9.  Configure the transport: [Detail](##Micro-XRCE-DDS-transport-configuration)
+9.  Configure the **micro-ROS transports**: [Details](micro_ros_transports.md)
 
 10. Build and run your project
-
-## Micro XRCE-DDS transport configuration
-### USB transport
-1. Copy the following files file to the source directory:
-      - `extra_sources/microros_transports/usb_transport.c`
-      - `extra_sources/microros_transports/usb_descriptor.c`
-2. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
-3. Filter for `usb` and enable the `r_usb_basic` and `r_usb_pcdc` components:
-
-   ![image](.images/Enable_usb.png)
-
-4. Go to the `Stacks` tab, then select `New Stack -> Middleware -> USB -> USB PCDC driver on r_usb_pcdc`.
-5. Go to `Clocks` tab and configure `UCLK` clock to match 48MHz (Match the values on the highlighted boxes):
-
-   ![image](.images/Configure_usb_clock.png)
-
-6. Save the modification using `ctrl + s` and click on `Generate Project Content`.
-
-### Serial transport
-1. Copy the following files file to the source directory:
-      - `extra_sources/microros_transports/uart_transport.c`
-2. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
-3. Filter for `uart` and enable the `r_sci_uart` component.
-4. Go to the `Stacks` tab, then select `New Stack -> Driver -> Connectivity -> r_src_uart`.
-5. Go to the component properties and configure the Tx/Rx pinout:
-
-   ![image](.images/Configure_serial.png)
-
-6. Save the modification using `ctrl + s` and click on `Generate Project Content`.
-
 ## License
 
 This repository is open-sourced under the Apache-2.0 license. See the [LICENSE](LICENSE) file for details.
