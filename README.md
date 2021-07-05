@@ -35,11 +35,10 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
 
 ## Requeriments
 
-1. [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio) for Linux <sup>*</sup>
+1. [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio) for Linux<sup>1</sup>
 2. FSP board packs for Renesas e<sup>2</sup> studio: [Guide](fps_install_packs.md).
 
-<small><sup>*</sup>Currently only support for Linux is avaible</small>
-
+*<sup>1</sup> Currently only support for Linux is available*
 ## Getting started
 
 TODO: Link to a repo with example projects
