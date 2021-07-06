@@ -1,4 +1,3 @@
-#include "net_thread.h"
 #include "FreeRTOS_IP.h"
 #include "FreeRTOS_IP_Private.h"
 #include "FreeRTOS_Sockets.h"
