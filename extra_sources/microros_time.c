@@ -1,7 +1,12 @@
 #include <time.h>
-#include "hal_data.h"
+#include "r_agt.h"
+#include "r_timer_api.h"
 
 #define NS_IN_S 1000000000UL
+
+extern const timer_instance_t g_timer0;
+extern agt_instance_ctrl_t g_timer0_ctrl;
+extern const timer_cfg_t g_timer0_cfg;
 
 #define MICRO_ROS_TIMER g_timer0
 #define MICRO_ROS_TIMER_CLK_SOURCE_HZ BSP_STARTUP_PCLKB_HZ
@@ -12,6 +17,7 @@
 #define MICRO_ROS_TIMER_CFG MICRO_ROS_ADD_SUFFIX(MICRO_ROS_TIMER,cfg)
 #define MICRO_ROS_TIMER_CTRL MICRO_ROS_ADD_SUFFIX(MICRO_ROS_TIMER,ctrl)
 
+void micro_ros_timer_cb(timer_callback_args_t * p_args);
 int clock_gettime( int clock_id, struct timespec * tp );
 
 static bool timer_init = false;
