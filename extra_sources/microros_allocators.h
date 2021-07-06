@@ -5,7 +5,7 @@
 #include <stddef.h>
 #include "hal_data.h"
 
-#ifdef FREERTOSCONFIG_H_
+#ifdef FREERTOSIPCONFIG_H_
 #define MICROROS_FREERTOS_ALLOCATORS
 #endif
 
