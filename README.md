@@ -34,6 +34,11 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
 
 1. [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio) for Linux<sup>1</sup>
 2. FSP board packs for Renesas e<sup>2</sup> studio: [Details](fps_install_packs.md).
+3. [Install colcon](https://colcon.readthedocs.io/en/released/user/installation.html) and dependencies, for example with:
+
+```bash
+pip3 install colcon-common-extensions catkin_pkg lark-parser empy
+```
 
 *<sup>1</sup> Currently only support for Linux is available*
 ## Getting started
@@ -87,7 +92,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
       - add `microros` in `Libraries (-l)`
    </details>
 
-6. **Add the following source** code files to your project, dragging them to source folder:
+6. **Add the following source** code files to your project, dragging them to source folder.
       - `extra_sources/microros_time.c`
       - `extra_sources/microros_allocators.c`
       - `extra_sources/microros_allocators.h`
@@ -120,7 +125,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
    </details>
 
-8. Configure **micro-ROS memory requirements**:
+8. Configure **micro-ROS memory requirements**.
 
    <details>
    <summary>Bare Metal and ThreadX</summary>
@@ -137,12 +142,33 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
    <details>
    <summary>FreeRTOS</summary>
-      TODO
+
+   Configure the stack and heap size in the created FreeRTOS task:
+
+      1. On the `configuration.xml` menu, go to the `Stacks` tab and create a micro-ROS task.
+      2. Go to the `Stacks` tab, then select `New Stack -> FreeRTOS -> Memory Management -> Heap 4`.
+      2. Click on thread properties and set `Thread -> Stack size (bytes)`:
+
+      IMAGEN 1
+
+      3. Click on thread properties and set `Common -> Memory Allocation`:
+
+IMAGEN 2
+
+      4.
+
+      4. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000:
+
+         ![image](.images/Configure_memory.png)
+
+      5. Save the modification using `ctrl + s` and click on `Generate Project Content`.
    </details>
 
-9.  Configure the **micro-ROS transports**: [Details](micro_ros_transports.md)
+9.  Configure the **micro-ROS transports**: [Details](micro_ros_transports.md).
 
-10. **Build and run** your project
+10. Add micro-ROS code in your codebase.
+
+11. **Build and run** your project.
 ## License
 
 This repository is open-sourced under the Apache-2.0 license. See the [LICENSE](LICENSE) file for details.
