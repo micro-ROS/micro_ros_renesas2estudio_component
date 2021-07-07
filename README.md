@@ -143,7 +143,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
    <details>
    <summary>FreeRTOS</summary>
 
-   Configure the stack and heap size in the created FreeRTOS task:
+   Create and configure the micro-ROS FreeRTOS task:
 
       1. On the `configuration.xml` menu, go to the `Stacks` tab and create a new thread for micro-ROS.
       2. Go to the `Stacks` tab, then select `New Stack -> FreeRTOS -> Memory Management -> Heap 4`. TODO: were to put this step?
@@ -156,8 +156,8 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
   
          ![image](.images/FreeRTOS_heap_stack.png)
 
-      4.  On the `configuration.xml` menu, go to the `BSP` tab.
-      5.  Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000 B:
+      4. On the `configuration.xml` menu, go to the `BSP` tab.
+      5. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000 B:
 
          ![image](.images/Configure_memory.png)
 
@@ -170,6 +170,9 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
    <details>
    <summary>threadX</summary>
+
+   Create and configure the micro-ROS threadX thread:
+
       1. On the `configuration.xml` menu, go to the `Stacks` tab and create a new thread for micro-ROS.
       2. Configure the micro-ROS thread properties:
          1. Set the name of the thread entry function under `Thread -> Symbol` to `micro_ros_thread`.
