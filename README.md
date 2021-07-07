@@ -169,7 +169,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
    </details>
 
    <details>
-   <summary>threadX</summary>
+   <summary>ThreadX</summary>
 
    Create and configure the micro-ROS threadX thread:
 
