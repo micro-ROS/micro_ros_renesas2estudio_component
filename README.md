@@ -147,7 +147,11 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
       1. On the `configuration.xml` menu, go to the `Stacks` tab and create a micro-ROS task.
       2. Go to the `Stacks` tab, then select `New Stack -> FreeRTOS -> Memory Management -> Heap 4`.
       3. Click on thread properties and set `Thread -> Stack size (bytes)` to 5000 B.
-      4. Click on thread properties and set `Common -> Memory Allocation` to 65000 B.
+      3. Click on thread properties and set `Thread -> Stack size (bytes)` to 5000 B.
+      4. Click on thread properties and set `Common -> Memory Allocation -> Support Dynamic Allocation` to `Enable`.
+      4. Click on thread properties and set `Common -> Memory Allocation -> Support Static Allocation` to `Enable`.
+      4. Click on thread properties and set `Common -> Memory Allocation -> Total Heap Size` to 65000 B.
+      4. Click on thread properties and set `Common -> Memory Allocation -> Total Heap Size` to 65000 B.
 
          ![image](.images/FreeRTOS_heap_stack.png)
 
