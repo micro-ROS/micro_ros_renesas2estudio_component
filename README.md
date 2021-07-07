@@ -128,7 +128,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 8. Configure **micro-ROS memory requirements**.
 
    <details>
-   <summary>Bare Metal and ThreadX</summary>
+   <summary>Bare Metal</summary>
 
    Configure the stack and heap size:
 
@@ -143,27 +143,51 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
    <details>
    <summary>FreeRTOS</summary>
 
-   Configure the stack and heap size in the created FreeRTOS task:
+   Create and configure the micro-ROS FreeRTOS task:
 
-      1. On the `configuration.xml` menu, go to the `Stacks` tab and create a micro-ROS task.
-      2. Go to the `Stacks` tab, then select `New Stack -> FreeRTOS -> Memory Management -> Heap 4`.
-      3. Click on thread properties and set `Thread -> Stack size (bytes)` to 5000 B.
-      3. Click on thread properties and set `Thread -> Stack size (bytes)` to 5000 B.
-      4. Click on thread properties and set `Common -> Memory Allocation -> Support Dynamic Allocation` to `Enable`.
-      4. Click on thread properties and set `Common -> Memory Allocation -> Support Static Allocation` to `Enable`.
-      4. Click on thread properties and set `Common -> Memory Allocation -> Total Heap Size` to 65000 B.
-      4. Click on thread properties and set `Common -> Memory Allocation -> Total Heap Size` to 65000 B.
-
+      1. On the `configuration.xml` menu, go to the `Stacks` tab and create a new thread for micro-ROS.
+      2. Click on the created thread, then select `New Stack -> FreeRTOS -> Memory Management -> Heap 4`.
+      3. Configure the micro-ROS thread properties:
+         1. Set the name of the thread entry function under `Thread -> Symbol` to `micro_ros_thread`.
+         2. Set `Thread -> Stack size (bytes)` to 5000 B.  
+         3. Set `Common -> Memory Allocation -> Support Dynamic Allocation` to `Enable`.  
+         4. Set `Common -> Memory Allocation -> Support Static Allocation` to `Enable`.  
+         5. Set `Common -> Memory Allocation -> Total Heap Size` to 65000 B.  
+  
          ![image](.images/FreeRTOS_heap_stack.png)
 
-      5. On the `configuration.xml` menu, go to the `BSP` tab.
-      6. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000 B:
+      4. On the `configuration.xml` menu, go to the `BSP` tab.
+      5. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000 B:
 
          ![image](.images/Configure_memory.png)
 
          *Note: It is required to have some heap outside FreeRTOS heap because [newlib will use it](https://nadler.com/embedded/newlibAndFreeRTOS.html)*
 
-      7. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+      6.  Save the modification using `ctrl + s` and click on `Generate Project Content`.
+      7.  Check that the file `thread_microros_entry.c` has been created on the project source directory.
+
+   </details>
+
+   <details>
+   <summary>ThreadX</summary>
+
+   Create and configure the micro-ROS threadX thread:
+
+      1. On the `configuration.xml` menu, go to the `Stacks` tab and create a new thread for micro-ROS.
+      2. Configure the micro-ROS thread properties:
+         1. Set the name of the thread entry function under `Thread -> Symbol` to `micro_ros_thread`.
+         2. Set and the thread stack size `Thread -> Stack size (bytes)` to 5000 B.
+         3. Increase thread timer resolution `Common -> Timer -> Timer Ticks Per Second` to 1000 ticks per second.  
+   
+         ![image](.images/ThreadX_thread_conf.png)
+
+      3. On the `configuration.xml` menu, go to the `BSP` tab.
+      4. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000 B:
+   
+         ![image](.images/Configure_memory.png)
+
+      5. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+      6. Check that the file `thread_microros_entry.c` has been created on the project source directory.
 
    </details>
 

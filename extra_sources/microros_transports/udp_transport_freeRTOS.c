@@ -12,16 +12,16 @@
 #include <string.h>
 #include <stdbool.h>
 
+static  uint8_t ucMACAddress[ 6 ]       = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55};
+
 #if( ipconfigUSE_DHCP != 0 )
-   /* DHCP populates these IP address, Sub net mask and Gateway Address. So start with this is zeroed out values
-    * The MAC address is Test MAC address.
-    */
-    static  uint8_t ucMACAddress[ 6 ]       = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55};
+    // DHCP enabled, this values will be automatically populated with the received IP address.
     static  uint8_t ucIPAddress[ 4 ]        = {0x00};
     static  uint8_t ucNetMask[ 4 ]          = {0x00};
     static  uint8_t ucGatewayAddress[ 4 ]   = {0x00};
     static  uint8_t ucDNSServerAddress[ 4 ] = {0x00};
 #else
+    // DHCP disabled, configure the board static IP address.
     static  uint8_t ucMACAddress[ 6 ]       = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55};
     static  uint8_t ucIPAddress[ 4 ]        = {192, 168, 1, 180};
     static  uint8_t ucNetMask[ 4 ]          = {255, 255, 255, 0};
@@ -55,9 +55,6 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
 bool renesas_e2_transport_close(struct uxrCustomTransport * transport){
     (void) transport;
     (void) FreeRTOS_shutdown(xSocket, FREERTOS_SHUT_RDWR);
-
-    /* FreeRTOS_closesocket() must be called even if FreeRTOS_shutdown() returns error.
-     * FreeRTOS_closesocket() always returns 0. */
     (void) FreeRTOS_closesocket(xSocket);
     return true;
 }
@@ -68,8 +65,6 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
 
     BaseType_t bytes_sent = FreeRTOS_sendto(xSocket, buf, len, 0, remote_addr, sizeof(struct freertos_sockaddr));
 
-    /* FreeRTOS_send() returns the number of bytes queued for sending.
-     * If an error or timeout occurred, FreeRTOS_send() returns a negative value. */
     if (0 <= bytes_sent)
     {
         rv = (size_t)bytes_sent;
