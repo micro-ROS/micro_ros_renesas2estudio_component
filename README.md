@@ -176,10 +176,8 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
       1. On the `configuration.xml` menu, go to the `Stacks` tab and create a new thread for micro-ROS.
       2. Configure the micro-ROS thread properties:
          1. Set the name of the thread entry function under `Thread -> Symbol` to `micro_ros_thread`.
-         2. Set `Thread -> Stack size (bytes)` to 5000 B.  
-         3. Set the name of the thread entry function under `Thread -> Symbol` to `micro_ros_thread`.
-         4. Set and the thread stack size `Thread -> Stack size (bytes)` to 5000.
-         5. Increase thread timer resolution `Common -> Timer -> Timer Ticks Per Second` to 1000 ticks per second.  
+         2. Set and the thread stack size `Thread -> Stack size (bytes)` to 5000 B.
+         3. Increase thread timer resolution `Common -> Timer -> Timer Ticks Per Second` to 1000 ticks per second.  
    
          ![image](.images/ThreadX_thread_conf.png)
 
