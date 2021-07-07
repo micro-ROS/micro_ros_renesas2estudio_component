@@ -3,6 +3,11 @@
 #define MICROROS_ALLOCATORS__H
 
 #include <stddef.h>
+#include "hal_data.h"
+
+#ifdef FREERTOSIPCONFIG_H_
+#define MICROROS_FREERTOS_ALLOCATORS
+#endif
 
 void * microros_allocate(size_t size, void * state);
 void microros_deallocate(void * pointer, void * state);

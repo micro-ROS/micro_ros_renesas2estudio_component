@@ -86,11 +86,22 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
     int64_t start = uxr_millis();
     size_t wrote = 0;
 
-    while ((it_head != it_tail) && (wrote < len) && (uxr_millis() -  start < timeout)){
-        buf[wrote] = it_buffer[it_head];
-        it_head = (it_head + 1) % UART_IT_BUFFER_SIZE;
-        wrote++;
-    }
+    while ((uxr_millis() -  start) < timeout)
+	{
+    	if (it_head != it_tail)
+    	{
+    		while (it_head != it_tail && wrote < len)
+    		{
+				buf[wrote] = it_buffer[it_head];
+				it_head = (it_head + 1) % UART_IT_BUFFER_SIZE;
+				wrote++;
+			}
+
+    		break;
+    	}
+
+    	R_BSP_SoftwareDelay(500, BSP_DELAY_UNITS_MICROSECONDS);
+	}
 
     return wrote;
 }

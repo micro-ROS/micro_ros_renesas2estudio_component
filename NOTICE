@@ -1,3 +1,4 @@
+
 # This is the official list of copyright holders and authors.
 #
 # Often employers or academic institutions have ownership over code that is
@@ -21,4 +22,6 @@
 # Please keep the list sorted.
 
 eProsima
+    Antonio Cuadros <antoniocuadros@eprosima.com>
     Pablo Garrido <pablogarrido@eprosima.com>
+
