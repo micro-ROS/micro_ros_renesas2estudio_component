@@ -39,7 +39,7 @@ Depending on which transport is used for micro-ROS specific configurations shoul
 2. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
 3. Filter for `uart` and enable the `r_sci_uart` component.
 4. Go to the `Stacks` tab, then select `New Stack -> Driver -> Connectivity -> r_src_uart`.
-5. *Optional: in order to set P441 and P410 as Tx/Rx first disable SPI1*
+5. *Optional: in order to set P411 and P410 as Tx/Rx first disable SPI1*
 6. Go to the component properties and configure the Tx/Rx pinout:
 
    ![image](.images/Configure_serial.png)
