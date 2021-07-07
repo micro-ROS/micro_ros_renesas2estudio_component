@@ -133,7 +133,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
    Configure the stack and heap size:
 
    1. On the `configuration.xml` menu, go to the `BSP` tab.
-   2. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000:
+   2. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000 B:
 
       ![image](.images/Configure_memory.png)
 
@@ -147,21 +147,20 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
       1. On the `configuration.xml` menu, go to the `Stacks` tab and create a micro-ROS task.
       2. Go to the `Stacks` tab, then select `New Stack -> FreeRTOS -> Memory Management -> Heap 4`.
-      2. Click on thread properties and set `Thread -> Stack size (bytes)`:
+      3. Click on thread properties and set `Thread -> Stack size (bytes)` to 5000 B.
+      4. Click on thread properties and set `Common -> Memory Allocation` to 65000 B.
 
-      IMAGEN 1
+         ![image](.images/FreeRTOS_heap_stack.png)
 
-      3. Click on thread properties and set `Common -> Memory Allocation`:
-
-IMAGEN 2
-
-      4.
-
-      4. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000:
+      5. On the `configuration.xml` menu, go to the `BSP` tab.
+      6. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000 B:
 
          ![image](.images/Configure_memory.png)
 
-      5. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+         *Note: It is required to have some heap outside FreeRTOS heap because [newlib will use it](https://nadler.com/embedded/newlibAndFreeRTOS.html)*
+
+      7. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+
    </details>
 
 9.  Configure the **micro-ROS transports**: [Details](micro_ros_transports.md).

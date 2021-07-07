@@ -48,7 +48,15 @@ Depending on which transport is used for micro-ROS specific configurations shoul
 
 ## UDP transport (FreeRTOS + TCP)
 
-TODO
+1. Copy the following files file to the source directory:
+      - `extra_sources/microros_transports/udp_transport_freeRTOS.c`
+
+2. Go to the `Stacks` tab, then select `New Stack -> FreeRTOS -> Libraries -> FreeRTOS + TCP`.
+3. Click on FreeRTOS + TCP properties and set `Common -> Use DHCP` to `Enable`.
+4. Click on FreeRTOS + TCP properties and set `Common -> DHCP Register Hostname` to `Disable`.
+5. Click on FreeRTOS + TCP properties and set `Common -> vApplicationIPNetworkEventHook` to `Disable`.
+
+   ![image](.images/FreeRTOSTCP_conf.png)
 
 ## UDP transport (ThreadX + NetX)
 
