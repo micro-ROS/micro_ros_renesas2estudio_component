@@ -22,21 +22,19 @@ uint8_t g_ip0_arp_cache_memory[G_IP0_ARP_CACHE_SIZE] BSP_ALIGN_VARIABLE(4);
 // Stack memory for g_ip0 Packet pool.
 uint8_t g_packet_pool0_pool_memory[G_PACKET_POOL0_PACKET_NUM * (G_PACKET_POOL0_PACKET_SIZE + sizeof(NX_PACKET))] BSP_ALIGN_VARIABLE(4) ETHER_BUFFER_PLACE_IN_SECTION;
 
-// Configure micro-ROS agent IP and port
-#define UDP_SERVER_PORT          8888
-#define UDP_SERVER_ADDRESS       IP_ADDRESS(192, 168, 1, 185)
-
 #define LINK_ENABLE_WAIT_TIME (1000U)
-
-// TODO: Check conflict with g_packet_pool0 packet number
-#define SOCKET_FIFO_SIZE 512    
+#define SOCKET_FIFO_SIZE G_PACKET_POOL0_PACKET_NUM
 
 // Set TX_TIMER_TICKS_PER_SECOND to 1000 (1 ms tick) in thread conf
-#define TX_MS_TO_TICKS(milliseconds) ((milliseconds / 1000.0) * TX_TIMER_TICKS_PER_SECOND)
+#define TX_MS_TO_TICKS(milliseconds) ((ULONG) ((milliseconds / 1000.0) * TX_TIMER_TICKS_PER_SECOND))
+
+void tx_application_define_user(void *first_unused_memory);
 
 // User resources init before ThreadX starts
 void tx_application_define_user(void *first_unused_memory)
 {
+    (void) first_unused_memory;
+
     // Initialize the NetX system.
     nx_system_initialize ();
 
@@ -103,7 +101,7 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     {
         return false;
     }
-    
+
     status = nx_udp_socket_create(&g_ip0, &socket, "Micro socket", NX_IP_NORMAL, NX_DONT_FRAGMENT, NX_IP_TIME_TO_LIVE, SOCKET_FIFO_SIZE);
 
     if(NX_SUCCESS != status)
@@ -137,7 +135,7 @@ bool renesas_e2_transport_close(struct uxrCustomTransport * transport){
 }
 
 size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * err){
-    (void) transport;
+    custom_transport_args * args = (custom_transport_args*) transport->args;
 
     volatile int result = FSP_SUCCESS;
     NX_PACKET *data_packet;
@@ -147,7 +145,7 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
 
     if (result != NX_SUCCESS)
     {
-        *err = result;
+        *err = (uint8_t) result;
         return 0;
     }
 
@@ -155,15 +153,15 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
 
     if (result != NX_SUCCESS)
     {
-        *err = result;
+        *err = (uint8_t) result;
         return 0;
     }
 
-    result = nx_udp_socket_send(&socket, data_packet, UDP_SERVER_ADDRESS, UDP_SERVER_PORT);
+    result = nx_udp_socket_send(&socket, data_packet, args->agent_ip_address, args->agent_port);
 
     if (result != NX_SUCCESS)
     {
-        *err = result;
+        *err = (uint8_t) result;
         return 0;
     }
 
@@ -182,7 +180,7 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
 
     if (result != NX_SUCCESS)
     {
-        *err = result;
+        *err = (uint8_t) result;
         return 0;
     }
 
@@ -194,7 +192,7 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
 
     if(NX_SUCCESS != result)
     {
-        *err = result;
+        *err = (uint8_t) result;
         return 0;
     }
 
