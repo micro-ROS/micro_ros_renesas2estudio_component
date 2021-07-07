@@ -37,19 +37,22 @@ void tx_application_define_user(void *first_unused_memory)
 
     // Initialize the NetX system.
     nx_system_initialize ();
-
-    // Create the packet pool.
-    nx_packet_pool_create(&g_packet_pool0,
-            "g_packet_pool0 Packet Pool",
-            G_PACKET_POOL0_PACKET_SIZE,
-            &g_packet_pool0_pool_memory[0],
-            G_PACKET_POOL0_PACKET_NUM * (G_PACKET_POOL0_PACKET_SIZE + sizeof(NX_PACKET)));
 }
 
 bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     (void) transport;
 
-    UINT status = NX_SUCCESS;
+    // Create the packet pool.
+    UINT status = nx_packet_pool_create(&g_packet_pool0,
+            "g_packet_pool0 Packet Pool",
+            G_PACKET_POOL0_PACKET_SIZE,
+            &g_packet_pool0_pool_memory[0],
+            G_PACKET_POOL0_PACKET_NUM * (G_PACKET_POOL0_PACKET_SIZE + sizeof(NX_PACKET)));
+    
+    if(NX_SUCCESS != status)
+    {
+        return false;
+    }
 
     // Create the ip instance.
     status = nx_ip_create(&g_ip0,
@@ -130,7 +133,28 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
 
 bool renesas_e2_transport_close(struct uxrCustomTransport * transport){
     (void) transport;
-    // TODO
+    
+    UINT status = nx_udp_socket_unbind(&socket);
+    
+    if(NX_SUCCESS != status)
+    {
+        return false;
+    }
+
+    status = nx_udp_socket_delete(&socket);
+
+    if(NX_SUCCESS != status)
+    {
+        return false;
+    }
+
+    status = nx_packet_pool_delete(&g_packet_pool0);
+
+    if(NX_SUCCESS != status)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -175,7 +199,6 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
     NX_PACKET *data_packet = NULL;
     ULONG bytes_read = 0;
 
-    // TODO: check timeout and TX_TIMER_TICKS_PER_SECOND values
     UINT result = nx_udp_socket_receive(&socket, &data_packet, TX_MS_TO_TICKS(timeout));
 
     if (result != NX_SUCCESS)

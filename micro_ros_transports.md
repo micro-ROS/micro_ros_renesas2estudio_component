@@ -49,15 +49,17 @@ Depending on which transport is used for micro-ROS specific configurations shoul
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
 3. Select `New Stack -> FreeRTOS -> Libraries -> FreeRTOS + TCP`.
 4. Configure the properties of the `FreeRTOS + TCP component`:
-   1. `Common -> Use DHCP` to `Enable`.
+   1. `Common -> vApplicationIPNetworkEventHook` to `Disable`.
    2. `Common -> DHCP Register Hostname` to `Disable`.
-   3. `Common -> vApplicationIPNetworkEventHook` to `Disable`.
+   3. *Optional: Enable DHCP `Common -> Use DHCP` to `Enable`*.
+   
+      *Note: If DHCP is disabled, the board network parameters can be configured on the transport source file `udp_transport_freeRTOS.c` *
+
+   4. *Optional: Increase number of buffers avaliable to the IP stack on `Common -> Total number of avaliable network buffers`*.
 
    ![image](.images/FreeRTOSTCP_conf.png)
 
 5.  Save the modification using `ctrl + s` and click on `Generate Project Content`.
-
-TODO: increase net buffer size?
 
 ## UDP transport (ThreadX + NetX)
 
@@ -74,4 +76,3 @@ TODO: increase net buffer size?
 
 5.  Save the modification using `ctrl + s` and click on `Generate Project Content`.
 
-TODO: Add detail on agent IP and port (Configure the micro-ROS Agent IP and port on the `udp_transport.c` file:)
