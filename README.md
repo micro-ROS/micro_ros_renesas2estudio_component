@@ -43,8 +43,7 @@ pip3 install colcon-common-extensions catkin_pkg lark-parser empy
 *<sup>1</sup> Currently only support for Linux is available*
 ## Getting started
 
-TODO: Link to a repo with example projects
-
+Ready to use example of this component can be found in [micro-ROS demos for Renesas e<sup>2</sup> studio repo](https://github.com/micro-ROS/micro_ros_renesas_demos).
 ## Using the micro-ROS Agent
 
 Is possible to use a **micro-ROS Agent** just with this docker command:
