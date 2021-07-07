@@ -1,5 +1,5 @@
 <br/>
-<a href="https://www.zephyrproject.org">
+<a>
    <p align="center">
       <img width="40%" src=".images/renesas_logo.gif">
       <img width="40%" src=".images/microros_logo.png">
