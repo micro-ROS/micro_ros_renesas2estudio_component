@@ -2,6 +2,14 @@
 #define MICROROS_TRANSPORTS__H
 
 #include <uxr/client/transport.h>
+#include "hal_data.h"
+
+#ifdef NX_API_H
+typedef struct custom_transport_args {
+    ULONG agent_ip_address;
+    UINT agent_port;
+} custom_transport_args;
+#endif
 
 bool renesas_e2_transport_open(struct uxrCustomTransport * transport);
 bool renesas_e2_transport_close(struct uxrCustomTransport * transport);
