@@ -27,16 +27,9 @@ void user_uart_callback (uart_callback_args_t * p_args)
             g_write_complete = true;
             break;
 
-        case UART_EVENT_RX_CHAR:
-            if(it_tail == UART_IT_BUFFER_SIZE)
-            {
-                it_tail = 0;
-            }
-
-            it_buffer[it_tail] = (uint8_t) p_args->data;
-            it_tail++;
-
-            break;
+        case UART_EVENT_RX_COMPLETE:
+        	 R_SCI_UART_Read(&g_uart0_ctrl, &it_buffer[0], UART_IT_BUFFER_SIZE);
+        	 break;
 
         default:
             break;
@@ -47,7 +40,7 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     (void) transport;
 
     fsp_err_t err = R_SCI_UART_Open(&g_uart0_ctrl, &g_uart0_cfg);
-
+    err = R_SCI_UART_Read(&g_uart0_ctrl, &it_buffer[0], UART_IT_BUFFER_SIZE);
     return err == FSP_SUCCESS;
 }
 
@@ -88,6 +81,8 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
 
     while ((uxr_millis() -  start) < timeout)
 	{
+    	it_tail = UART_IT_BUFFER_SIZE - g_uart0_ctrl.rx_dest_bytes;
+
     	if (it_head != it_tail)
     	{
     		while (it_head != it_tail && wrote < len)
