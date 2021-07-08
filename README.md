@@ -104,24 +104,20 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
    <summary>Steps</summary>
 
    Configure `g_timer0` as an `r_agt`
-      1. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
-      2. Filter for `timer` and enable the `r_agt` timer:
-
-         ![image](.images/Enable_timer.png)
-
-      3. Go to the `Stacks` tab, then select `New Stack -> Driver -> Timers -> Timer Driver on r_agt`.
-      4. Modify the clock period on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Period`) to `0x800000`
-      5. Modify the count source on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Count Source`) to `PCLKB`
-      6. Modify the interrupt callback on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Callback`) to `micro_ros_timer_cb`
-      7. Modify the underflow interrupt priority on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Underflow Interrupt Priority`) to `Priority 15`
+      1. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
+      2. Select `New Stack -> Driver -> Timers -> Timer Driver on r_agt`.
+      3. Modify the clock period on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Period`) to `0x800000`
+      4. Modify the count source on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Count Source`) to `PCLKB`
+      5. Modify the interrupt callback on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Callback`) to `micro_ros_timer_cb`
+      6. Modify the underflow interrupt priority on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Underflow Interrupt Priority`) to `Priority 15`
 
          ![image](.images/Timer_configuration.png)
 
-      8. Make sure that PCLKB is set to 12500 kHz in `Clocks` tab:
+      7. Make sure that PCLKB is set to 12500 kHz in `Clocks` tab:
 
          ![image](.images/Configure_timer_clock.png)
 
-      9.  Save the modification using `ctrl + s` and click on `Generate Project Content`.
+      8.  Save the modifications clicking on `Generate Project Content`.
 
    </details>
 
@@ -137,7 +133,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
       ![image](.images/Configure_memory.png)
 
-   3. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+   3. Save the modifications clicking on `Generate Project Content`.
    </details>
 
    <details>
@@ -163,7 +159,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
          *Note: It is required to have some heap outside FreeRTOS heap because [newlib will use it](https://nadler.com/embedded/newlibAndFreeRTOS.html)*
 
-      6.  Save the modification using `ctrl + s` and click on `Generate Project Content`.
+      6.  Save the modifications clicking on `Generate Project Content`.
       7.  Check that the file `thread_microros_entry.c` has been created on the project source directory.
 
    </details>
@@ -186,7 +182,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
    
          ![image](.images/Configure_memory.png)
 
-      5. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+      5. Save the modifications clicking on `Generate Project Content`.
       6. Check that the file `thread_microros_entry.c` has been created on the project source directory.
 
    </details>

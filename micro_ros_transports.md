@@ -27,7 +27,7 @@ Depending on which transport is used for micro-ROS specific configurations shoul
 
    ![image](.images/Configure_usb_clock.png)
 
-5. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+5. Save the modifications clicking on `Generate Project Content`.
 
 ## Serial UART transport
 1. Copy the following files file to the source directory:
@@ -39,7 +39,7 @@ Depending on which transport is used for micro-ROS specific configurations shoul
 
    ![image](.images/Configure_serial.png)
 
-6. Save the modification using `ctrl + s` and click on `Generate Project Content`.
+6. Save the modifications clicking on `Generate Project Content`.
 
 ## UDP transport (FreeRTOS + TCP)
 
@@ -59,7 +59,23 @@ Depending on which transport is used for micro-ROS specific configurations shoul
 
    ![image](.images/FreeRTOSTCP_conf.png)
 
-5.  Save the modification using `ctrl + s` and click on `Generate Project Content`.
+5.  Save the modifications clicking on `Generate Project Content`.
+6.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
+
+      ```
+      struct freertos_sockaddr remote_addr;
+      remote_addr.sin_family = FREERTOS_AF_INET;
+      remote_addr.sin_port = FreeRTOS_htons(8888);
+      remote_addr.sin_addr = FreeRTOS_inet_addr("192.168.1.185");
+
+      rmw_uros_set_custom_transport(
+         false,
+         (void *) &remote_addr,
+         renesas_e2_transport_open,
+         renesas_e2_transport_close,
+         renesas_e2_transport_write,
+         renesas_e2_transport_read);
+      ```
 
 ## UDP transport (ThreadX + NetX)
 
@@ -74,5 +90,21 @@ Depending on which transport is used for micro-ROS specific configurations shoul
 
    2. *Optional: Select the Ethernet Driver submodule `g_ether0` and set the board MAC address on `Module g_ether0 Ethernet Driver on r_ether -> General -> MAC address`*.
 
-5.  Save the modification using `ctrl + s` and click on `Generate Project Content`.
+5.  Save the modifications clicking on `Generate Project Content`.
+6.  Configure micro-ROS agent IP and port passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
+
+      ```
+      custom_transport_args remote_addr = {
+         .agent_ip_address=IP_ADDRESS(192,168,1,185),
+         .agent_port=8888
+      };
+
+      rmw_uros_set_custom_transport(
+         false,
+         (void *) &remote_addr,
+         renesas_e2_transport_open,
+         renesas_e2_transport_close,
+         renesas_e2_transport_write,
+         renesas_e2_transport_read);
+      ```
 
