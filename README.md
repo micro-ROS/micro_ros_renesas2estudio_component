@@ -116,7 +116,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
          ![image](.images/Configure_timer_clock.png)
 
-      8.  Save the modifications clicking on `Generate Project Content`.
+      8.  Save the modifications by clicking on `Generate Project Content`.
 
    </details>
 
