@@ -10,7 +10,8 @@
 
 # micro-ROS for Renesas e<sup>2</sup> studio
 
-[![ ](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/ci_galactic.yml/badge.svg?branch=foxy)](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/ci_galactic.yml)
+[![micro-ROS HIL tests](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/ci.yml/badge.svg)](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/ci.yml)
+[![micro-ROS HIL agent](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/build_agent.yml/badge.svg)](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/build_agent.yml)
 
 This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio). This components targets [Renesas RA family](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus), an ARM Cortex-M based MCU series, enabling a full micro-ROS compatibility for developing robotics and IoT applications.
 
@@ -144,11 +145,11 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
       2. Click on the created thread, then select `New Stack -> FreeRTOS -> Memory Management -> Heap 4`.
       3. Configure the micro-ROS thread properties:
          1. Set the name of the thread entry function under `Thread -> Symbol` to `micro_ros_thread`.
-         2. Set `Thread -> Stack size (bytes)` to 5000 B.  
-         3. Set `Common -> Memory Allocation -> Support Dynamic Allocation` to `Enable`.  
-         4. Set `Common -> Memory Allocation -> Support Static Allocation` to `Enable`.  
-         5. Set `Common -> Memory Allocation -> Total Heap Size` to 65000 B.  
-  
+         2. Set `Thread -> Stack size (bytes)` to 5000 B.
+         3. Set `Common -> Memory Allocation -> Support Dynamic Allocation` to `Enable`.
+         4. Set `Common -> Memory Allocation -> Support Static Allocation` to `Enable`.
+         5. Set `Common -> Memory Allocation -> Total Heap Size` to 65000 B.
+
          ![image](.images/FreeRTOS_heap_stack.png)
 
       4. On the `configuration.xml` menu, go to the `BSP` tab.
@@ -172,13 +173,13 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
       2. Configure the micro-ROS thread properties:
          1. Set the name of the thread entry function under `Thread -> Symbol` to `micro_ros_thread`.
          2. Set and the thread stack size `Thread -> Stack size (bytes)` to 5000 B.
-         3. Increase thread timer resolution `Common -> Timer -> Timer Ticks Per Second` to 1000 ticks per second.  
-   
+         3. Increase thread timer resolution `Common -> Timer -> Timer Ticks Per Second` to 1000 ticks per second.
+
          ![image](.images/ThreadX_thread_conf.png)
 
       3. On the `configuration.xml` menu, go to the `BSP` tab.
       4. Go to the `RA Common` section and set the `Main stack size (bytes)` and `Heap size (bytes)` fields to 5000 B:
-   
+
          ![image](.images/Configure_memory.png)
 
       5. Save the modifications by clicking on `Generate Project Content`.
