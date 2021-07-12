@@ -82,16 +82,14 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/udp_transport_threadX.c`
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
-3. Select `New Stack -> Azure RTOS -> NetX Duo -> NetX Duo IP instance`.
-4. Configure the properties of the `NetX Duo IP instance`:
-   1. Configure the board network parameters:
+3. Select `New Stack -> Azure RTOS -> NetX Duo -> Protocols -> NetX Duo DHCP IPv4 Client`.
+4. Click on Add NetX Duo Packet Pool and select `Use g_packet_pool0 NetX Duo Packet Pool Instance`:
 
-   ![image](.images/Configure_network_threadX.png)
+   ![image](.images/ThreadX_DHCP_conf.png)
 
-   2. *Optional: Select the Ethernet Driver submodule `g_ether0` and set the board MAC address on `Module g_ether0 Ethernet Driver on r_ether -> General -> MAC address`*.
-
-5.  Save the modifications by clicking on `Generate Project Content`.
-6.  Configure micro-ROS agent IP and port passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
+5. *Optional: Increase number of buffers avaliable to the IP stack on `g_packet_pool0` properties on `Module g_packet_pool0 NetX Duo Packet Pool Instance -> Number of Packets in Pool`*.
+6.  Save the modifications by clicking on `Generate Project Content`.
+7.  Configure micro-ROS agent IP and port passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
 
       ```
       custom_transport_args remote_addr = {
