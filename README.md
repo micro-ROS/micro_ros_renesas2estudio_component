@@ -12,17 +12,7 @@
 
 [![ ](httpsasdfasdfgithub.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/ci_galactic.yml/badge.svg?branch=foxy)](https://github.com/micro-ROS/micro_ros_renesas_testbench/actions/workflows/ci_galactic.yml)
 
-This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio). This components targets [Renesas RA family](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus), an ARM Cortex-M based MCU series, enabling a full micro-ROS compatibility for developing robotics and IoT applications.
-
-- [micro-ROS for Renesas e<sup>2</sup> studio](#micro-ros-for-renesas-esup2sup-studio)
-  - [Supported platorms](#supported-platorms)
-  - [Requirements](#requirements)
-  - [Getting started](#getting-started)
-  - [Using the micro-ROS Agent](#using-the-micro-ros-agent)
-  - [Integrating micro-ROS in your project](#integrating-micro-ros-in-your-project)
-  - [License](#license)
-  - [Known Issues / Limitations](#known-issues--limitations)
-
+This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studi
 ---
 ## Supported platforms
 
