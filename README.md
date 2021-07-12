@@ -44,10 +44,9 @@ pip3 install colcon-common-extensions catkin_pkg lark-parser empy
 *<sup>1</sup> Currently only support for Linux is available*
 ## Getting started
 
-Ready to use example of this component can be found in [micro-ROS demos for Renesas e<sup>2</sup> studio repo](https://github.com/micro-ROS/micro_ros_renesas_demos).
+A ready-to-use example of this component can be found in [micro-ROS demos for Renesas e<sup>2</sup> studio repo](https://github.com/micro-ROS/micro_ros_renesas_demos).
 ## Using the micro-ROS Agent
-
-Is possible to use a **micro-ROS Agent** just with this docker command:
+It is possible to use a **micro-ROS Agent** just with this docker command:
 
 ```bash
 # UDPv4 micro-ROS Agent
@@ -133,7 +132,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
       ![image](.images/Configure_memory.png)
 
-   3. Save the modifications clicking on `Generate Project Content`.
+   3. Save the modifications by clicking on `Generate Project Content`.
    </details>
 
    <details>
@@ -167,7 +166,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
    <details>
    <summary>ThreadX</summary>
 
-   Create and configure the micro-ROS threadX thread:
+   Create and configure the micro-ROS ThreadX thread:
 
       1. On the `configuration.xml` menu, go to the `Stacks` tab and create a new thread for micro-ROS.
       2. Configure the micro-ROS thread properties:
@@ -182,7 +181,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
    
          ![image](.images/Configure_memory.png)
 
-      5. Save the modifications clicking on `Generate Project Content`.
+      5. Save the modifications by clicking on `Generate Project Content`.
       6. Check that the file `thread_microros_entry.c` has been created on the project source directory.
 
    </details>
