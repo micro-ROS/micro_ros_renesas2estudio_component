@@ -1,4 +1,5 @@
 #include "hal_data.h"
+#include "nxd_dhcp_client.h"
 
 #include <uxr/client/transport.h>
 #include <rmw_microxrcedds_c/config.h>
@@ -10,6 +11,7 @@
 #include <stdbool.h>
 
 NX_IP g_ip0;
+NX_DHCP g_dhcp_client0;
 NX_UDP_SOCKET socket;
 NX_PACKET_POOL g_packet_pool0;
 
@@ -34,6 +36,12 @@ void tx_application_define_user(void *first_unused_memory);
 void tx_application_define_user(void *first_unused_memory)
 {
     (void) first_unused_memory;
+
+    // Unique MAC address for device
+	const bsp_unique_id_t * unique_id = R_BSP_UniqueIdGet();
+	for(size_t i = 2; i < 6; i++){
+		g_ether0_cfg.p_mac_address[i] = unique_id->unique_id_bytes[i];
+	}
 
     // Initialize the NetX system.
     nx_system_initialize ();
@@ -95,9 +103,20 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
         return false;
     }
 
+    // Configure DHCP
+	status = nx_dhcp_create(&g_dhcp_client0, &g_ip0, "g_dhcp_client0");
+
+    if(NX_SUCCESS != status)
+	{
+		return false;
+	}
+
+	nx_dhcp_packet_pool_set(&g_dhcp_client0, &g_packet_pool0);
+    nx_dhcp_start(&g_dhcp_client0);
+
     // Wait for the link to be enabled.
     ULONG current_state;
-    ULONG needed_state = NX_IP_UDP_ENABLED | NX_IP_ARP_ENABLED | NX_IP_LINK_ENABLED;
+	ULONG needed_state = NX_IP_UDP_ENABLED | NX_IP_ARP_ENABLED | NX_IP_LINK_ENABLED | NX_IP_ADDRESS_RESOLVED;
     status = nx_ip_status_check(&g_ip0, needed_state, &current_state, LINK_ENABLE_WAIT_TIME);
 
     if(NX_SUCCESS != status)
