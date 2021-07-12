@@ -9,7 +9,7 @@
 
 # micro-ROS transports for  Renesas e<sup>2</sup> studio
 
-Depending on which transport is used for micro-ROS specific configurations should be done.
+Depending on which transport is used for micro-ROS specific configurations, the following should be done.
 
 - [micro-ROS transports for  Renesas e<sup>2</sup> studio](#micro-ros-transports-for--renesas-esup2sup-studio)
   - [USB-CDC transport](#usb-cdc-transport)
