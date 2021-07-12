@@ -18,7 +18,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
   - [UDP transport (ThreadX + NetX)](#udp-transport-threadx--netx)
 
 ## USB-CDC transport
-1. Copy the following files file to the source directory:
+1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/usb_transport.c`
       - `extra_sources/microros_transports/usb_descriptor.c`
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
@@ -27,10 +27,10 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
    ![image](.images/Configure_usb_clock.png)
 
-5. Save the modifications clicking on `Generate Project Content`.
+5. Save the modifications by clicking on `Generate Project Content`.
 
 ## Serial UART transport
-1. Copy the following files file to the source directory:
+1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/uart_transport.c`
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
 3. Select `New Stack -> Driver -> Connectivity -> r_src_uart`.
@@ -43,7 +43,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
 ## UDP transport (FreeRTOS + TCP)
 
-1. Copy the following files file to the source directory:
+1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/udp_transport_freeRTOS.c`
 
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
@@ -59,7 +59,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
    ![image](.images/FreeRTOSTCP_conf.png)
 
-5.  Save the modifications clicking on `Generate Project Content`.
+5.  Save the modifications by clicking on `Generate Project Content`.
 6.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
 
       ```
@@ -79,7 +79,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
 ## UDP transport (ThreadX + NetX)
 
-1. Copy the following files file to the source directory:
+1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/udp_transport_threadX.c`
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
 3. Select `New Stack -> Azure RTOS -> NetX Duo -> NetX Duo IP instance`.
@@ -90,7 +90,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
    2. *Optional: Select the Ethernet Driver submodule `g_ether0` and set the board MAC address on `Module g_ether0 Ethernet Driver on r_ether -> General -> MAC address`*.
 
-5.  Save the modifications clicking on `Generate Project Content`.
+5.  Save the modifications by clicking on `Generate Project Content`.
 6.  Configure micro-ROS agent IP and port passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
 
       ```
