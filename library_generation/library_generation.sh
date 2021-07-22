@@ -35,7 +35,7 @@ if [ ! -f "$BASE_PATH/libmicroros/libmicroros.a" ]; then
     make -f libmicroros.mk
 else
     # If exists just rebuild
-    # make -f libmicroros.mk rebuild_metas
+    make -f libmicroros.mk rebuild_metas
 fi
 
 ######## Generate extra files ########
