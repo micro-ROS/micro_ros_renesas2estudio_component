@@ -78,7 +78,7 @@ $(INSTALL_DIR)/micro_ros_src/install: $(INSTALL_DIR)/toolchain.cmake $(INSTALL_D
 	colcon build \
 		--merge-install \
 		--packages-ignore-regex=.*_cpp \
-		--metas $(COMPONENT_DIR)/colcon.meta $(COMPONENT_DIR)/../../app_colcon.meta \
+		--metas $(COMPONENT_DIR)/colcon.meta $(COMPONENT_DIR)/../../app_colcon.meta $(USER_COLCON_META) \
 		--cmake-force-configure \
 		--cmake-clean-cache \
 		--cmake-args \
@@ -93,6 +93,41 @@ $(INSTALL_DIR)/micro_ros_src/install: $(INSTALL_DIR)/toolchain.cmake $(INSTALL_D
 		-DCMAKE_VERBOSE_MAKEFILE=OFF;
 
 $(INSTALL_DIR)/libmicroros.a: $(INSTALL_DIR)/micro_ros_src/install
+	mkdir -p $(INSTALL_DIR)/micro_ros_src/aux; cd $(INSTALL_DIR)/micro_ros_src/aux; \
+	for file in $$(find $(INSTALL_DIR)/micro_ros_src/install/lib/ -name '*.a'); do \
+		folder=$$(echo $$file | sed -E "s/(.+)\/(.+).a/\2/"); \
+		mkdir -p $$folder; cd $$folder; $(AR) x $$file; \
+		for f in *; do \
+			mv $$f ../$$folder-$$f; \
+		done; \
+		cd ..; rm -rf $$folder; \
+	done ; \
+	$(AR) rc -s libmicroros.a *.obj; cp libmicroros.a $(INSTALL_DIR); \
+	cd ..; rm -rf aux; \
+	cp -R $(INSTALL_DIR)/micro_ros_src/install/include $(INSTALL_DIR)/include;
+
+rebuild_metas:
+	export META_PACKAGES=$$(python3 $(COMPONENT_DIR)/get_metas_packages.py $(USER_COLCON_META)); \
+	cd $(INSTALL_DIR)/micro_ros_src; \
+	unset AMENT_PREFIX_PATH; \
+	PATH=$(subst /opt/ros/$(ROS_DISTRO)/bin,,$(PATH)); \
+	. ../micro_ros_dev/install/local_setup.sh; \
+	colcon build \
+		--merge-install \
+		--packages-ignore-regex=.*_cpp \
+		--packages-select $$META_PACKAGES \
+		--metas $(COMPONENT_DIR)/colcon.meta $(COMPONENT_DIR)/../../app_colcon.meta $(USER_COLCON_META) \
+		--cmake-force-configure \
+		--cmake-args \
+		"--no-warn-unused-cli" \
+		--log-level=ERROR \
+		-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=OFF \
+		-DTHIRDPARTY=ON \
+		-DBUILD_SHARED_LIBS=OFF \
+		-DBUILD_TESTING=OFF \
+		-DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
+		-DCMAKE_TOOLCHAIN_FILE=$(INSTALL_DIR)/toolchain.cmake \
+		-DCMAKE_VERBOSE_MAKEFILE=OFF;\
 	mkdir -p $(INSTALL_DIR)/micro_ros_src/aux; cd $(INSTALL_DIR)/micro_ros_src/aux; \
 	for file in $$(find $(INSTALL_DIR)/micro_ros_src/install/lib/ -name '*.a'); do \
 		folder=$$(echo $$file | sed -E "s/(.+)\/(.+).a/\2/"); \
