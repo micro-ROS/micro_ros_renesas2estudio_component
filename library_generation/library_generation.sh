@@ -4,13 +4,15 @@ set -e
 export BASE_PATH=$(pwd)/..
 
 ######## Check existing library ########
-if [ -f "$BASE_PATH/libmicroros/libmicroros.a" ]; then
+if [[ -f "$BASE_PATH/libmicroros/libmicroros.a" && ! -f "$USER_COLCON_META" ]]; then
     echo "micro-ROS library found. Skipping..."
     echo "Delete micro_ros_renesas2estudio_component/libmicroros/ for rebuild."
     exit 0
 fi
 
-rm -rf $BASE_PATH/libmicroros
+if [ ! -f "$USER_COLCON_META" ]; then
+    rm -rf $BASE_PATH/libmicroros
+fi
 
 ######## Trying to retrieve CFLAGS ########
 export RET_CFLAGS=$1
@@ -26,9 +28,15 @@ echo $(which arm-none-eabi-gcc)
 echo Version: $(arm-none-eabi-gcc -dumpversion)
 echo "-------------"
 
-
 ######## Build  ########
-make -f libmicroros.mk
+
+if [ ! -f "$BASE_PATH/libmicroros/libmicroros.a" ]; then
+    # If library does not exist build it
+    make -f libmicroros.mk
+else
+    # If exists just rebuild
+    make -f libmicroros.mk rebuild_metas
+fi
 
 ######## Generate extra files ########
 find $BASE_PATH/libmicroros/micro_ros_src/src \( -name "*.srv" -o -name "*.msg" -o -name "*.action" \) | awk -F"/" '{print $(NF-2)"/"$NF}' > $BASE_PATH/libmicroros/available_ros2_types
