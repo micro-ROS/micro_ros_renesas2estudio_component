@@ -118,6 +118,7 @@ rebuild_metas:
 		--packages-select $$META_PACKAGES \
 		--metas $(COMPONENT_DIR)/colcon.meta $(COMPONENT_DIR)/../../app_colcon.meta $(USER_COLCON_META) \
 		--cmake-force-configure \
+		--cmake-clean-cache \
 		--cmake-args \
 		"--no-warn-unused-cli" \
 		--log-level=ERROR \
@@ -139,4 +140,5 @@ rebuild_metas:
 	done ; \
 	$(AR) rc -s libmicroros.a *.obj; cp libmicroros.a $(INSTALL_DIR); \
 	cd ..; rm -rf aux; \
+	rm -rf $(INSTALL_DIR)/include; \
 	cp -R $(INSTALL_DIR)/micro_ros_src/install/include $(INSTALL_DIR)/include;

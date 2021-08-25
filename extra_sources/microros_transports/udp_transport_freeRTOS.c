@@ -32,6 +32,8 @@ static  uint8_t ucMACAddress[ 6 ]       = {0x00};
 struct freertos_sockaddr *remote_addr;
 Socket_t xSocket;
 
+static bool net_init = false;
+
 bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     (void) transport;
     bool rv = false;
@@ -44,12 +46,14 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
 
     memcpy(ucMACAddress, g_ether0_cfg.p_mac_address, sizeof(ucMACAddress));
 
-    FreeRTOS_IPInit(ucIPAddress,
-                    ucNetMask,
-                    ucGatewayAddress,
-                    ucDNSServerAddress,
-                    ucMACAddress);
-
+    if(!net_init){
+        net_init = true;
+        FreeRTOS_IPInit(ucIPAddress,
+                        ucNetMask,
+                        ucGatewayAddress,
+                        ucDNSServerAddress,
+                        ucMACAddress);
+    }
 
     xSocket = FreeRTOS_socket(FREERTOS_AF_INET, FREERTOS_SOCK_DGRAM, FREERTOS_IPPROTO_UDP);
     if (FREERTOS_INVALID_SOCKET != xSocket)
