@@ -48,14 +48,9 @@ int clock_gettime( int clock_id, struct timespec * tp )
     timer_status_t status;
     R_AGT_StatusGet(&MICRO_ROS_TIMER_CTRL, &status);
 
-    uint64_t ns = (uint64_t) (MICRO_ROS_TIMER_CFG.period_counts - status.counter) * ns_per_tick;
+    uint64_t ns = (uint64_t) (MICRO_ROS_TIMER_CFG.period_counts - status.counter) * ns_per_tick + (uint64_t) (rollover_count * ns_per_period);
     tp->tv_sec = (long int)((ns / NS_IN_S));
     tp->tv_nsec = (long int)(ns % NS_IN_S);
-
-    uint64_t rollover_ns = (uint64_t) (rollover_count * ns_per_period);
-    tp->tv_sec += (long int)((rollover_ns / NS_IN_S));
-    tp->tv_nsec += (long int)(rollover_ns % NS_IN_S);
-
 
     return 0;
 }
