@@ -34,7 +34,7 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
 ## Requirements
 
 - [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio) for Linux<sup>1</sup>
-- FSP board packs for Renesas e<sup>2</sup> studio: [Details](fps_install_packs.md).
+- FSP v3.2.1 board packs for Renesas e<sup>2</sup> studio: [Details](fps_install_packs.md).
 - GNU Arm Embedded Toolchain v9.3.1.20200408 (Other compatible toolchain may work).
 - [Install colcon](https://colcon.readthedocs.io/en/released/user/installation.html) and dependencies, for example with:
 
