@@ -10,8 +10,8 @@
 # FSP Board pack installation on Renesas e<sup>2</sup> studio
 
 ## Download
-
-- Download the latest FSP packs as zip file from the  [Renesas Github repository](https://github.com/renesas/fsp/releases). For example, version 2.4.0 can be downloaded here: [FSP_Packs_v2.4.0.zip](https://github.com/renesas/fsp/releases/download/v2.4.0/FSP_Packs_v2.4.0.zip)
+https://github.com/renesas/fsp/releases/download/
+- Download the latest FSP packs as zip file from the  [Renesas Github repository](https://github.com/renesas/fsp/releases). For example, version 3.2.1 can be downloaded here: [FSP_Packs_v3.2.1.zip](https://github.com/renesas/fsp/releases/tag/v3.2.1)
 
 ## Install Renesas FSP packs
 
