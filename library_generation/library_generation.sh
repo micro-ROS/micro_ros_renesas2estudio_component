@@ -28,17 +28,18 @@ echo $(which arm-none-eabi-gcc)
 echo Version: $(arm-none-eabi-gcc -dumpversion)
 echo "-------------"
 
-######## Add extra packages  ########
-pushd extra_packages
-    git clone -b ros2 https://github.com/ros2/geometry2
-    cp -R geometry2/tf2_msgs tf2_msgs
-    rm -rf geometry2
-popd
-
 ######## Build  ########
 
 if [ ! -f "$BASE_PATH/libmicroros/libmicroros.a" ]; then
     # If library does not exist build it
+
+    ######## Add extra packages  ########
+    pushd extra_packages
+        git clone -b ros2 https://github.com/ros2/geometry2
+        cp -R geometry2/tf2_msgs tf2_msgs
+        rm -rf geometry2
+    popd
+
     make -f libmicroros.mk
 else
     # If exists just rebuild
