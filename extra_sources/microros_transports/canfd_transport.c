@@ -17,15 +17,16 @@
 bool g_write_complete = false;
 bool g_read_complete = false;
 
-const uint32_t CAN_ID = 0x1100;
+// TODO: handle user CAN_ID
+const uint32_t CAN_ID = 0x1500;
 
 // TODO: Acceptance filter array parameters 
 const canfd_afl_entry_t p_canfd0_afl[CANFD_CFG_AFL_CH0_RULE_NUM] =
 {
- { /* Accept all messages with Extended ID 0x1000-0x1FFF */
+ { // Accept all messages with Extended ID 0x1000-0x1FFF
    .id =
    {
-    /* Specify the ID, ID type and frame type to accept. */
+    // Specify the ID, ID type and frame type to accept.
     .id         = CAN_ID,
     .frame_type = CAN_FRAME_TYPE_DATA,
     .id_mode    = CAN_ID_MODE_EXTENDED
@@ -33,22 +34,22 @@ const canfd_afl_entry_t p_canfd0_afl[CANFD_CFG_AFL_CH0_RULE_NUM] =
 
    .mask =
    {
-    /* These values mask which ID/mode bits to compare when filtering messages. */
-    .mask_id         = 0,//0x1FFFF000,
+    // These values mask which ID/mode bits to compare when filtering messages.
+    .mask_id         = 0x0000FF00,
     .mask_frame_type = 0,
     .mask_id_mode    = 1
    },
 
    .destination =
    {
-    /* If DLC checking is enabled any messages shorter than the below setting will be rejected. */
+    // If DLC checking is enabled any messages shorter than the below setting will be rejected.
     .minimum_dlc = (canfd_minimum_dlc_t)0,
 
-    /* Optionally specify a Receive Message Buffer (RX MB) to store accepted frames. RX MBs do not have an
-     * interrupt or overwrite protection and must be checked with R_CANFD_InfoGet and R_CANFD_Read. */
+    // Optionally specify a Receive Message Buffer (RX MB) to store accepted frames. RX MBs do not have an
+    // interrupt or overwrite protection and must be checked with R_CANFD_InfoGet and R_CANFD_Read.
     .rx_buffer   = CANFD_RX_MB_0,
 
-    /* Specify which FIFO(s) to send filtered messages to. Multiple FIFOs can be OR'd together. */
+    // Specify which FIFO(s) to send filtered messages to. Multiple FIFOs can be OR'd together.
     .fifo_select_flags = CANFD_RX_FIFO_0,
    }
  },
@@ -89,7 +90,7 @@ void canfd0_callback(can_callback_args_t *p_args)
 bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     (void) transport;
 
-    // TODO: // Use mailbox or FIFO?
+    // Use mailbox or FIFO?
     fsp_err_t err = R_CANFD_Open(&g_canfd0_ctrl, &g_canfd0_cfg);
     return err == FSP_SUCCESS;
 }
@@ -107,7 +108,6 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
     (void) error;
 
     can_frame_t g_canfd_tx_frame;
-
     g_canfd_tx_frame.id = CAN_ID;
     g_canfd_tx_frame.id_mode = CAN_ID_MODE_EXTENDED,
     g_canfd_tx_frame.type = CAN_FRAME_TYPE_DATA;
@@ -166,6 +166,7 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
             // TODO: check len
             (void) len;
             memcpy(buf, &g_canfd_rx_frame.data[0], g_canfd_rx_frame.data_length_code);
+            wrote = g_canfd_rx_frame.data_length_code;
             break;
         }
 
