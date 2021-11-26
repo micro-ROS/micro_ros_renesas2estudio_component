@@ -13,8 +13,8 @@
 
 #ifdef RMW_UXRCE_TRANSPORT_CUSTOM
 
-// Set device can identifier
-const uint32_t CAN_ID = 0x00001500;
+// Set device Extended ID (0x0000-0x1FFF)
+const uint32_t CAN_ID = 0x0001;
 
 #define CAN_MAILBOX_NUMBER_0  0U
 #define CANFD_MTU 64
@@ -24,6 +24,7 @@ uint8_t len_to_dlc(size_t len);
 // --- micro-ROS Transports ---
 bool g_write_complete = false;
 bool g_error = false;
+bool enable_BRS = false;
 
 const canfd_afl_entry_t p_canfd0_afl[CANFD_CFG_AFL_CH0_RULE_NUM] =
 {
@@ -31,7 +32,7 @@ const canfd_afl_entry_t p_canfd0_afl[CANFD_CFG_AFL_CH0_RULE_NUM] =
    .id =
    {
     // Specify the ID, ID type and frame type to accept.
-    .id         = CAN_ID,
+    .id         = CAN_ID << 12,
     .frame_type = CAN_FRAME_TYPE_DATA,
     .id_mode    = CAN_ID_MODE_EXTENDED
    },
@@ -39,7 +40,7 @@ const canfd_afl_entry_t p_canfd0_afl[CANFD_CFG_AFL_CH0_RULE_NUM] =
    .mask =
    {
     // These values mask which ID/mode bits to compare when filtering messages.
-    .mask_id         = 0x1FFFFFFFU,
+    .mask_id         = 0x1FFFF000U,
     .mask_frame_type = CAN_FRAME_TYPE_DATA,
     .mask_id_mode    = CAN_ID_MODE_EXTENDED
    },
@@ -59,6 +60,7 @@ const canfd_afl_entry_t p_canfd0_afl[CANFD_CFG_AFL_CH0_RULE_NUM] =
  },
 };
 
+// Temporal fix for r_canfd_bytes_to_dlc
 uint8_t len_to_dlc(size_t len)
 {
     uint8_t result = 0;
@@ -67,22 +69,33 @@ uint8_t len_to_dlc(size_t len)
     {
         result = (uint8_t) len;
     }
-    else if (len<= 24)
+    else if (len <= 12)
     {
-        len -= 8U;
-        result =  (uint8_t) (8U + (len / 4U));
-
-        if(len % 4U){
-            result++;
-        }
+        result = 12;
     }
-    else if (len<= 64)
+    else if (len <= 16)
     {
-        result = (uint8_t) (0xDU + ((len / 16U) - 2U));
-
-        if(len % 16U){
-            result++;
-        }
+        result = 16;
+    }
+    else if (len <= 20)
+    {
+        result = 20;
+    }
+    else if (len <= 24)
+    {
+        result = 24;
+    }
+    else if (len <= 32)
+    {
+        result = 32;
+    }
+    else if (len <= 48)
+    {
+        result = 48;
+    }
+    else
+    {
+        result = 64;
     }
 
     return result;
@@ -142,11 +155,15 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
     (void) error;
 
     can_frame_t g_canfd_tx_frame;
-    g_canfd_tx_frame.id = CAN_ID;
+    g_canfd_tx_frame.id = CAN_ID << 12;
     g_canfd_tx_frame.id_mode = CAN_ID_MODE_EXTENDED,
     g_canfd_tx_frame.type = CAN_FRAME_TYPE_DATA;
     g_canfd_tx_frame.data_length_code = len_to_dlc(len);
     g_canfd_tx_frame.options = CANFD_FRAME_OPTION_FD;
+
+    if (enable_BRS){
+        g_canfd_tx_frame.options |= CANFD_FRAME_OPTION_BRS;   // Optional: Bit Rate Switching mode
+    }
 
     g_write_complete = false;
     g_error = false;
@@ -194,7 +211,7 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
         if(can_rx_info.rx_mb_status)
         {
             // Read the input frame received
-            err = R_CANFD_Read(&g_canfd0_ctrl, CANFD_RX_MB_0, &g_canfd_rx_frame);
+            err = R_CANFD_Read(&g_canfd0_ctrl, 0, &g_canfd_rx_frame);
 
             if (FSP_SUCCESS != err)
             {
