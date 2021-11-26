@@ -16,6 +16,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
   - [Serial UART transport](#serial-uart-transport)
   - [UDP transport (FreeRTOS + TCP)](#udp-transport-freertos--tcp)
   - [UDP transport (ThreadX + NetX)](#udp-transport-threadx--netx)
+  - [CAN FD transport](#can-fd-transport)
 
 ## USB-CDC transport
 1. Copy the following files to the source directory:
@@ -106,3 +107,16 @@ Depending on which transport is used for micro-ROS specific configurations, the 
          renesas_e2_transport_read);
       ```
 
+## CAN FD transport
+    1. Copy the following files to the source directory:
+          - `extra_sources/microros_transports/canfd_transport.c`
+    2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
+    3. Select `New Stack -> Driver -> Connectivity -> r_can_fd`.
+    4. Configure CAN component:
+       1. ...
+    5. Set micro ros build options:
+       1. ...
+    6. Configure device CAN id and optional conf:
+       1. ...
+
+    7. Save the modifications clicking on `Generate Project Content`.
