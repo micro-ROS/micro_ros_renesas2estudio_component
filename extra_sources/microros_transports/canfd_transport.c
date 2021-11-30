@@ -11,20 +11,21 @@
 #include <uxr/client/util/time.h>
 #include <rmw_microxrcedds_c/config.h>
 
-#ifdef RMW_UXRCE_TRANSPORT_CUSTOM
+#define CAN_BUFFER_SIZE 8
 
 // Set device Extended ID (0x0000-0x1FFF)
 const uint32_t CAN_ID = 0x0001;
+bool enable_BRS = false;
 
-#define CAN_MAILBOX_NUMBER_0  0U
-#define CANFD_MTU 64
+#ifdef RMW_UXRCE_TRANSPORT_CUSTOM
 
 uint8_t len_to_dlc(size_t len);
 
-// --- micro-ROS Transports ---
+can_frame_t g_canfd_rx_frame[CAN_BUFFER_SIZE];
+static size_t it_head = 0, it_tail = 0;
+
 bool g_write_complete = false;
 bool g_error = false;
-bool enable_BRS = false;
 
 const canfd_afl_entry_t p_canfd0_afl[CANFD_CFG_AFL_CH0_RULE_NUM] =
 {
@@ -106,8 +107,21 @@ void canfd0_callback(can_callback_args_t *p_args)
     switch (p_args->event)
     {
         case CAN_EVENT_TX_COMPLETE:
+        case CAN_EVENT_TX_FIFO_EMPTY:
         {
             g_write_complete = true;
+            break;
+        }
+        case CAN_EVENT_RX_COMPLETE:
+        {
+            memcpy(&g_canfd_rx_frame[it_tail], &p_args->frame, sizeof(p_args->frame));
+            it_tail++;
+
+            if (CAN_BUFFER_SIZE == it_tail)
+            {
+                it_tail = 0;
+            }
+
             break;
         }
         case CAN_EVENT_ERR_WARNING:             //error warning event
@@ -120,22 +134,16 @@ void canfd0_callback(can_callback_args_t *p_args)
         case CAN_EVENT_TX_ABORTED:              // Transmit abort event.
         case CAN_EVENT_ERR_GLOBAL:              // Global error has occurred.
         {
-            // volatile canfd_error_t error = p_args->error;
             g_error = true;
             break;
         }
-
-        case CAN_EVENT_RX_COMPLETE: // Currently driver don't support this. This is unreachable code for now.
-        case CAN_EVENT_TX_FIFO_EMPTY:
-        default:
-            break;
     }
 }
 
 bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     (void) transport;
 
-    if (UXR_CONFIG_CUSTOM_TRANSPORT_MTU != CANFD_MTU) {
+    if (UXR_CONFIG_CUSTOM_TRANSPORT_MTU != 64) {
         return false;
     }
 
@@ -150,7 +158,7 @@ bool renesas_e2_transport_close(struct uxrCustomTransport * transport){
     return err == FSP_SUCCESS;
 }
 
-size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * error){
+size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * error) {
     (void) transport;
     (void) error;
 
@@ -168,64 +176,51 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
     g_write_complete = false;
     g_error = false;
 
+    if (len > UXR_CONFIG_CUSTOM_TRANSPORT_MTU) {
+        // This should never execute
+        return 0;
+    }
+
     memcpy(&g_canfd_tx_frame.data[0], buf, len);
-    fsp_err_t err =  R_CANFD_Write(&g_canfd0_ctrl, CAN_MAILBOX_NUMBER_0, &g_canfd_tx_frame);
+    memset(&g_canfd_tx_frame.data[len], 0, g_canfd_tx_frame.data_length_code - len);
+    fsp_err_t err =  R_CANFD_Write(&g_canfd0_ctrl, 0, &g_canfd_tx_frame);
 
     if (err != FSP_SUCCESS) {
         return 0;
     }
 
-    while(!g_write_complete) {
+    while (!g_write_complete && !g_error) {
         R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
-
-        if (g_error) {
-            return 0;
-        }
     }
 
-    return len;
+    return g_write_complete ? len : 0;
 }
 
-size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* error){
+size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* error) {
     (void) transport;
     (void) error;
 
-    can_frame_t g_canfd_rx_frame;
-    can_info_t can_rx_info;
-    fsp_err_t err;
-
     int64_t start = uxr_millis();
     size_t wrote = 0;
-    g_error = false;
 
-    while ((uxr_millis() -  start) < timeout && !g_error)
+    while ((uxr_millis() -  start) < timeout)
     {
-        err = R_CANFD_InfoGet(&g_canfd0_ctrl, &can_rx_info);
-
-        if (FSP_SUCCESS != err)
+        if (it_head != it_tail)
         {
-            // TODO: set error
-            return 0;
-        }
-
-        if(can_rx_info.rx_mb_status)
-        {
-            // Read the input frame received
-            err = R_CANFD_Read(&g_canfd0_ctrl, 0, &g_canfd_rx_frame);
-
-            if (FSP_SUCCESS != err)
-            {
-                // TODO: set error
-                return 0;
-            }
-
-            if (g_canfd_rx_frame.data_length_code > len) {
+            if (g_canfd_rx_frame[it_head].data_length_code > len) {
                 // This should never execute
                 return 0;
             }
 
-            memcpy(buf, &g_canfd_rx_frame.data[0], g_canfd_rx_frame.data_length_code);
-            wrote = g_canfd_rx_frame.data_length_code;
+            memcpy(buf, &g_canfd_rx_frame[it_head].data[0], g_canfd_rx_frame[it_head].data_length_code);
+            wrote = g_canfd_rx_frame[it_head].data_length_code;
+            it_head++;
+
+            if (CAN_BUFFER_SIZE == it_head)
+            {
+                it_head = 0;
+            }
+
             break;
         }
 
