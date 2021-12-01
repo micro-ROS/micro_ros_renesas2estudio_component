@@ -112,9 +112,9 @@ Depending on which transport is used for micro-ROS specific configurations, the 
       - `extra_sources/microros_transports/canfd_transport.c`
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
 3. Select `New Stack -> Driver -> Connectivity -> r_can_fd`.
-4. Go to Clocks tab:
-   1. Configure CANFDCLK clock to match 40 MHz
-   2. Make sure PCLBK clock is set to 50 MHz and PCLAK to 100 MHz.
+4. Go to `Clocks` tab:
+   1. Configure `CANFDCLK` clock to match 40 MHz.
+   2. Make sure `PCLKB` clock is set to 50 MHz and `PCLKA` to 100 MHz.
 
       *Example clock configuration:*
 
@@ -149,33 +149,34 @@ Depending on which transport is used for micro-ROS specific configurations, the 
       ```
 
 9.  Modify micro-ROS library build options:
-   1. Set transport MTU to 64 bytes:
-      ```
-      {
-         "names": {
+    1.  Set transport MTU to 64 bytes:
+        ```
+        {
+        "names": {
             "microxrcedds_client": {
-                  "cmake-args": [
-                     "-DUCLIENT_CUSTOM_TRANSPORT_MTU=64",
-                     ...
-                  ]
+                    "cmake-args": [
+                    "-DUCLIENT_CUSTOM_TRANSPORT_MTU=64",
+                    ...
+                    ]
             },
-         }
-      }
-      ```
+        }
+        }
+        ```
 
-   2. *Optional: Increase the number of stream buffers to match your message requirements:*
-      ```
-      {
-         "names": {
+
+    2.  *Optional: Increase the number of stream buffers to match your message requirements:*
+        ```
+        {
+        "names": {
             "rmw_microxrcedds": {
-                  "cmake-args": [
-                     "-DRMW_UXRCE_STREAM_HISTORY=8",
-                     ...
-                  ]
+                    "cmake-args": [
+                    "-DRMW_UXRCE_STREAM_HISTORY=8",
+                    ...
+                    ]
             },
-         }
-      }
-      ```
+        }
+        }
+        ```
 
       This parameter will control the maximum payload of a publish message:
       `RMW_UXRCE_STREAM_HISTORY * UCLIENT_CUSTOM_TRANSPORT_MTU = 512 bytes`
@@ -186,6 +187,8 @@ Depending on which transport is used for micro-ROS specific configurations, the 
     1. Set an unique CAN frame ID for this device (CAN_ID).
     2. *Optional: Increase reception buffer size (CAN_BUFFER_SIZE).*
     3. *Optional: Enable the BRS (bit rate switch) flag (enable_BRS).*
+
+         *Example CAN transport configuration:*
 
          ![image](.images/CAN_transport_conf.png)
 
