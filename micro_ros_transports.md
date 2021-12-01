@@ -149,32 +149,31 @@ Depending on which transport is used for micro-ROS specific configurations, the 
       ```
 
 9.  Modify micro-ROS library build options:
-    1.  Set transport MTU to 64 bytes:
+    1.  Set transport MTU to 64 bytes on `microxrcedds_client`:
         ```
         {
-        "names": {
-            "microxrcedds_client": {
-                    "cmake-args": [
-                    "-DUCLIENT_CUSTOM_TRANSPORT_MTU=64",
-                    ...
-                    ]
-            },
-        }
+            "names": {
+                "microxrcedds_client": {
+                        "cmake-args": [
+                            "-DUCLIENT_CUSTOM_TRANSPORT_MTU=64",
+                            ...
+                        ]
+                },
+            }
         }
         ```
 
-
-    2.  *Optional: Increase the number of stream buffers to match your message requirements:*
+    2.  *Optional: Increase the number of stream buffers to match your message requirements on `rmw_microxrcedds`:*
         ```
         {
-        "names": {
-            "rmw_microxrcedds": {
-                    "cmake-args": [
-                    "-DRMW_UXRCE_STREAM_HISTORY=8",
-                    ...
-                    ]
-            },
-        }
+            "names": {
+                "rmw_microxrcedds": {
+                        "cmake-args": [
+                            "-DRMW_UXRCE_STREAM_HISTORY=8",
+                            ...
+                        ]
+                },
+            }
         }
         ```
 
