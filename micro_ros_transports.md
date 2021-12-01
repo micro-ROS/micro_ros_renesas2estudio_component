@@ -178,7 +178,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
         ```
 
       This parameter will control the maximum payload of a publish message:
-      `RMW_UXRCE_STREAM_HISTORY * UCLIENT_CUSTOM_TRANSPORT_MTU = 512 bytes`
+      `RMW_UXRCE_STREAM_HISTORY * UCLIENT_CUSTOM_TRANSPORT_MTU (bytes)`
 
    3. To rebuild the micro-ROS library, clean and rebuild your project.
 
