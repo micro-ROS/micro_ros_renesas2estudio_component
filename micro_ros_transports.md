@@ -111,7 +111,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/canfd_transport.c`
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
-3. Select `New Stack -> Driver -> Connectivity -> r_can_fd`.
+3. Select `New Stack -> Driver -> Connectivity -> r_canfd`.
 4. Go to `Clocks` tab:
    1. Configure `CANFDCLK` clock to match 40 MHz.
    2. Make sure `PCLKB` clock is set to 50 MHz and `PCLKA` to 100 MHz.
@@ -149,38 +149,31 @@ Depending on which transport is used for micro-ROS specific configurations, the 
       ```
 
 9.  Modify micro-ROS library build options:
-    1.  Set transport MTU to 64 bytes on `microxrcedds_client`:
-        ```
-        {
-            "names": {
-                "microxrcedds_client": {
-                        "cmake-args": [
-                            "-DUCLIENT_CUSTOM_TRANSPORT_MTU=64",
-                            ...
-                        ]
-                },
-            }
-        }
-        ```
-
-    2.  *Optional: Increase the number of stream buffers to match your message requirements on `rmw_microxrcedds`:*
+    1.  Create a file named `app_colcon.meta` on your project main directory.
+    2.  Add the following configuration to the file:
         ```
         {
             "names": {
                 "rmw_microxrcedds": {
-                        "cmake-args": [
-                            "-DRMW_UXRCE_STREAM_HISTORY=8",
-                            ...
-                        ]
+                    "cmake-args": [
+                        "-DRMW_UXRCE_STREAM_HISTORY=8"
+                    ]
+                },
+                "microxrcedds_client": {
+                    "cmake-args": [
+                        "-DUCLIENT_CUSTOM_TRANSPORT_MTU=64"
+                    ]
                 },
             }
         }
         ```
 
-      This parameter will control the maximum payload of a publish message:
-      `RMW_UXRCE_STREAM_HISTORY * UCLIENT_CUSTOM_TRANSPORT_MTU (bytes)`
+    3.  *Optional: Increase the number of stream buffers to match your message requirements with `RMW_UXRCE_STREAM_HISTORY`.*
 
-   3. To rebuild the micro-ROS library, clean and rebuild your project.
+        This parameter will control the maximum payload of a publish message:
+        `RMW_UXRCE_STREAM_HISTORY * UCLIENT_CUSTOM_TRANSPORT_MTU (bytes)`
+
+    4. To rebuild the micro-ROS library, clean and rebuild your project.
 
 10. Set CAN transport configuration on the `canfd_transport.c` file:
     1. Set an unique CAN frame ID for this device (CAN_ID).
