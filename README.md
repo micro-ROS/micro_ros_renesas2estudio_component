@@ -113,7 +113,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
       3. Modify the clock period unit on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Period Unit`) to `Microseconds`
       4. Modify the count source on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Count Source`) to `PCLKB`
       5. Modify the interrupt callback on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Callback`) to `micro_ros_timer_cb`
-      6. Modify the underflow interrupt priority on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Underflow Interrupt Priority`) to `Priority 15`
+      6. Modify the underflow interrupt priority on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Underflow Interrupt Priority`) to `Priority 12`
 
          ![image](.images/Timer_configuration.png)
 
