@@ -16,6 +16,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
   - [Serial UART transport](#serial-uart-transport)
   - [UDP transport (FreeRTOS + TCP)](#udp-transport-freertos--tcp)
   - [UDP transport (ThreadX + NetX)](#udp-transport-threadx--netx)
+  - [CAN FD transport](#can-fd-transport)
 
 ## USB-CDC transport
 1. Copy the following files to the source directory:
@@ -106,3 +107,81 @@ Depending on which transport is used for micro-ROS specific configurations, the 
          renesas_e2_transport_read);
       ```
 
+## CAN FD transport
+1. Copy the following files to the source directory:
+      - `extra_sources/microros_transports/canfd_transport.c`
+2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
+3. Select `New Stack -> Driver -> Connectivity -> r_canfd`.
+4. Go to `Clocks` tab:
+   1. Configure `CANFDCLK` clock to match 40 MHz.
+   2. Make sure `PCLKB` clock is set to 50 MHz and `PCLKA` to 100 MHz.
+
+      *Example clock configuration:*
+
+      ![image](.images/Configure_CAN_clock.png)
+
+5. Configure CAN reception:
+   1. `Common -> Reception -> Message Buffers -> Number of Buffers` to `0`.
+   2. `Common -> Reception -> FIFOs -> FIFO 0 -> Enable` to `Enabled`
+   3. `Common -> Reception -> FIFOs -> FIFO 0 -> Interrupt Mode` to `Every Frame`.
+   4. `Common -> Reception -> FIFOs -> FIFO 0 -> Payload Size` to `64 bytes`.
+
+6. Configure CAN interrupts:
+   1. Enable `Module g_canfd0 CANFD Driver on r_canfd -> Transmit Interrupts -> TXMB 0`.
+   2. Set `Module g_canfd0 CANFD Driver on r_canfd -> Interrupts -> Channel Interrupt Priority Level` to `Priority 3`.
+   3. Enable all interrupts on `Module g_canfd0 CANFD Driver on r_canfd -> Channel Error Interrupts`.
+
+7. Configure CAN component:
+   1. `Module g_canfd0 CANFD Driver on r_canfd -> General -> Channel` to `1`.
+   2. Go to the Pins tab and configure your `CANFD1` pinout. As an example to use with the integrated `TJA1042T` transceiver:
+
+      ![image](.images/CAN_pinout.png)
+
+8. Configure your CAN FD Bitrate:
+   1. As an example:
+
+      ![image](.images/Bitrate_CAN_example.png)
+
+   2. Make sure the configuration matches with the CAN used on the agent. Example configuration on linux:
+      ```
+      sudo ip link set can0 up type can bitrate 500000 sample-point 0.75 dbitrate 2000000 fd on
+      sudo ifconfig can0 txqueuelen 65536
+      ```
+
+9.  Modify micro-ROS library build options:
+    1.  Create a file named `app_colcon.meta` on your project main directory.
+    2.  Add the following configuration to the file:
+        ```
+        {
+            "names": {
+                "rmw_microxrcedds": {
+                    "cmake-args": [
+                        "-DRMW_UXRCE_STREAM_HISTORY=8"
+                    ]
+                },
+                "microxrcedds_client": {
+                    "cmake-args": [
+                        "-DUCLIENT_CUSTOM_TRANSPORT_MTU=64"
+                    ]
+                },
+            }
+        }
+        ```
+
+    3.  *Optional: Increase the number of stream buffers to match your message requirements with `RMW_UXRCE_STREAM_HISTORY`.*
+
+        This parameter will control the maximum payload of a publish message:
+        `RMW_UXRCE_STREAM_HISTORY * UCLIENT_CUSTOM_TRANSPORT_MTU (bytes)`
+
+    4. To rebuild the micro-ROS library, clean and rebuild your project.
+
+10. Set CAN transport configuration on the `canfd_transport.c` file:
+    1. Set an unique CAN frame ID for this device (CAN_ID).
+    2. *Optional: Increase reception buffer size (CAN_BUFFER_SIZE).*
+    3. *Optional: Enable the BRS (bit rate switch) flag (enable_BRS).*
+
+         *Example CAN transport configuration:*
+
+         ![image](.images/CAN_transport_conf.png)
+
+11. Save the modifications clicking on `Generate Project Content`.
