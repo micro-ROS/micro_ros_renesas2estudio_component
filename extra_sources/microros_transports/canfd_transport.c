@@ -183,7 +183,7 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
     }
 
     memcpy(&g_canfd_tx_frame.data[1], buf, len);
-    g_canfd_tx_frame.data[0] = len;
+    g_canfd_tx_frame.data[0] = (uint8_t) len;
 
     // Fill rest of CAN frame with 0 (len to DLC)
     memset(&g_canfd_tx_frame.data[len+1], 0, g_canfd_tx_frame.data_length_code - len);
