@@ -12,6 +12,7 @@
 #include <rmw_microxrcedds_c/config.h>
 
 #define CAN_BUFFER_SIZE 8
+#define CAN_XRCE_PAYLOAD 63
 
 // Set device Extended ID (0x0000-0x1FFF)
 const uint32_t CAN_ID = 0x0001;
@@ -143,7 +144,7 @@ void canfd0_callback(can_callback_args_t *p_args)
 bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     (void) transport;
 
-    if (UXR_CONFIG_CUSTOM_TRANSPORT_MTU != 64) {
+    if (UXR_CONFIG_CUSTOM_TRANSPORT_MTU != CAN_XRCE_PAYLOAD) {
         return false;
     }
 
@@ -181,8 +182,12 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
         return 0;
     }
 
-    memcpy(&g_canfd_tx_frame.data[0], buf, len);
-    memset(&g_canfd_tx_frame.data[len], 0, g_canfd_tx_frame.data_length_code - len);
+    memcpy(&g_canfd_tx_frame.data[1], buf, len);
+    g_canfd_tx_frame.data[0] = len;
+
+    // Fill rest of CAN frame with 0 (len to DLC)
+    memset(&g_canfd_tx_frame.data[len+1], 0, g_canfd_tx_frame.data_length_code - len);
+
     fsp_err_t err =  R_CANFD_Write(&g_canfd0_ctrl, 0, &g_canfd_tx_frame);
 
     if (err != FSP_SUCCESS) {
@@ -207,13 +212,14 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
     {
         if (it_head != it_tail)
         {
-            if (g_canfd_rx_frame[it_head].data_length_code > len) {
+            size_t received_bytes = g_canfd_rx_frame[it_head].data[0];
+            if (received_bytes > len) {
                 // This should never execute
                 return 0;
             }
 
-            memcpy(buf, &g_canfd_rx_frame[it_head].data[0], g_canfd_rx_frame[it_head].data_length_code);
-            wrote = g_canfd_rx_frame[it_head].data_length_code;
+            memcpy(buf, &g_canfd_rx_frame[it_head].data[1], received_bytes);
+            wrote = received_bytes;
             it_head++;
 
             if (CAN_BUFFER_SIZE == it_head)

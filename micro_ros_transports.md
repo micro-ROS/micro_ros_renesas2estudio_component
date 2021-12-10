@@ -161,7 +161,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
                 },
                 "microxrcedds_client": {
                     "cmake-args": [
-                        "-DUCLIENT_CUSTOM_TRANSPORT_MTU=64"
+                        "-DUCLIENT_CUSTOM_TRANSPORT_MTU=63"
                     ]
                 },
             }
