@@ -167,7 +167,7 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
     g_canfd_tx_frame.id = CAN_ID << 12;
     g_canfd_tx_frame.id_mode = CAN_ID_MODE_EXTENDED,
     g_canfd_tx_frame.type = CAN_FRAME_TYPE_DATA;
-    g_canfd_tx_frame.data_length_code = len_to_dlc(len);
+    g_canfd_tx_frame.data_length_code = len_to_dlc(len+1);
     g_canfd_tx_frame.options = CANFD_FRAME_OPTION_FD;
 
     if (enable_BRS){
