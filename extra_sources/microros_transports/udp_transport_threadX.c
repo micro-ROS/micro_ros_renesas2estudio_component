@@ -39,8 +39,17 @@ void tx_application_define_user(void *first_unused_memory)
 
     // Unique MAC address for device
 	const bsp_unique_id_t * unique_id = R_BSP_UniqueIdGet();
-	for(size_t i = 2; i < 6; i++){
-		g_ether0_cfg.p_mac_address[i] = (uint8_t) (unique_id->unique_id_words[i-2] % UINT8_MAX);
+	for(size_t i = 2; i < 6; i++)
+    {
+        uint32_t sum = 0;
+        size_t UniqueId_offset = (i-2)*4;
+
+        for (size_t j = 0; j < 4; j++)
+        {
+            sum += unique_id->unique_id_words[j+UniqueId_offset];
+        }
+
+		g_ether0_cfg.p_mac_address[i] = (uint8_t) (sum % UINT8_MAX);
 	}
 
     // Initialize the NetX system.
