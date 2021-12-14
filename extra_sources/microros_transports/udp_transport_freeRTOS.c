@@ -41,8 +41,8 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     // Unique MAC address for device
     const bsp_unique_id_t * unique_id = R_BSP_UniqueIdGet();
     for(size_t i = 2; i < 6; i++){
-        g_ether0_cfg.p_mac_address[i] = unique_id->unique_id_bytes[i];
-    }
+		g_ether0_cfg.p_mac_address[i] = (uint8_t) (unique_id->unique_id_words[i-2] % UINT8_MAX);
+	}
 
     memcpy(ucMACAddress, g_ether0_cfg.p_mac_address, sizeof(ucMACAddress));
 
