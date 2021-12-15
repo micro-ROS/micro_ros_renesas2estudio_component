@@ -54,14 +54,18 @@ Depending on which transport is used for micro-ROS specific configurations, the 
    2. `Common -> DHCP Register Hostname` to `Disable`.
    3. *Optional: Enable DHCP `Common -> Use DHCP` to `Enable`*.
    
-      *Note: If DHCP is disabled, the board network parameters can be configured on the transport source file `udp_transport_freeRTOS.c` *
+      *Note: If DHCP is disabled, the board network parameters can be configured on the transport source file `udp_transport_freeRTOS.c`*
 
    4. *Optional: Increase number of buffers avaliable to the IP stack on `Common -> Total number of avaliable network buffers`*.
 
    ![image](.images/FreeRTOSTCP_conf.png)
 
-5.  Save the modifications by clicking on `Generate Project Content`.
-6.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
+5. Increase number of Ethernet Tx buffers on `g_ether0 component -> Module g_ether0 Ethernet Driver on r_ether -> Buffers -> Number of RX buffer` to 4:
+
+   ![image](.images/FreeRTOSTCP_eth_conf.png)
+
+6.  Save the modifications by clicking on `Generate Project Content`.
+7.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
 
       ```
       struct freertos_sockaddr remote_addr;
@@ -161,7 +165,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
                 },
                 "microxrcedds_client": {
                     "cmake-args": [
-                        "-DUCLIENT_CUSTOM_TRANSPORT_MTU=64"
+                        "-DUCLIENT_CUSTOM_TRANSPORT_MTU=63"
                     ]
                 },
             }
