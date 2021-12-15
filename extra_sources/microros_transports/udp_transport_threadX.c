@@ -43,12 +43,10 @@ void tx_application_define_user(void *first_unused_memory)
     {
         uint32_t sum = 0;
         size_t UniqueId_offset = (i-2)*4;
-
         for (size_t j = 0; j < 4; j++)
         {
             sum += unique_id->unique_id_words[j+UniqueId_offset];
         }
-
         g_ether0_cfg.p_mac_address[i] = (uint8_t) (sum % UINT8_MAX);
     }
 
