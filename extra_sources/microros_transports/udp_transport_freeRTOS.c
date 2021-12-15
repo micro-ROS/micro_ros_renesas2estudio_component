@@ -50,8 +50,8 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
             sum += unique_id->unique_id_words[j+UniqueId_offset];
         }
 
-		g_ether0_cfg.p_mac_address[i] = (uint8_t) (sum % UINT8_MAX);
-	}
+        g_ether0_cfg.p_mac_address[i] = (uint8_t) (sum % UINT8_MAX);
+    }
 
     memcpy(ucMACAddress, g_ether0_cfg.p_mac_address, sizeof(ucMACAddress));
 

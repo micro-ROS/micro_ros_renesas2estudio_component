@@ -49,8 +49,8 @@ void tx_application_define_user(void *first_unused_memory)
             sum += unique_id->unique_id_words[j+UniqueId_offset];
         }
 
-		g_ether0_cfg.p_mac_address[i] = (uint8_t) (sum % UINT8_MAX);
-	}
+        g_ether0_cfg.p_mac_address[i] = (uint8_t) (sum % UINT8_MAX);
+    }
 
     // Initialize the NetX system.
     nx_system_initialize ();
