@@ -9,6 +9,10 @@
 
 # FSP Board pack installation on Renesas e<sup>2</sup> studio
 
+## Renesas e2 studio installer
+
+- Download the e2 studio Linux AppImage from the  [Renesas Github repository](https://github.com/renesas/fsp/releases). For example, e2 studio installer for FSP version 3.5.0 can be downloaded here: [setup_fsp_v3_5_0_e2s_v2021-10.AppImage](https://github.com/renesas/fsp/releases/download/v3.5.0/setup_fsp_v3_5_0_e2s_v2021-10.AppImage)
+- Perform a Quick Install, this will automatically include the latest FSP and GNU Arm Embedded Toolchain versions.
 
 ## Manual FSP Update
 
