@@ -48,8 +48,9 @@ Depending on which transport is used for micro-ROS specific configurations, the 
       - `extra_sources/microros_transports/udp_transport_freeRTOS.c`
 
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
-3. Select `New Stack -> FreeRTOS -> Libraries -> FreeRTOS + TCP`.
-4. Configure the properties of the `FreeRTOS + TCP component`:
+3. Select `New Stack -> Networking -> FreeRTOS + TCP`.
+4. Select `New Stack -> RTOS -> FreeRTOS Heap 4`.
+5. Configure the properties of the `FreeRTOS + TCP component`:
    1. `Common -> vApplicationIPNetworkEventHook` to `Disable`.
    2. `Common -> DHCP Register Hostname` to `Disable`.
    3. *Optional: Enable DHCP `Common -> Use DHCP` to `Enable`*.
@@ -60,12 +61,12 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
    ![image](.images/FreeRTOSTCP_conf.png)
 
-5. Increase number of Ethernet Tx buffers on `g_ether0 component -> Module g_ether0 Ethernet Driver on r_ether -> Buffers -> Number of RX buffer` to 4:
+6. Increase number of Ethernet Tx buffers on `g_ether0 component -> Module g_ether0 Ethernet Driver on r_ether -> Buffers -> Number of RX buffer` to 4:
 
    ![image](.images/FreeRTOSTCP_eth_conf.png)
 
-6.  Save the modifications by clicking on `Generate Project Content`.
-7.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
+7.  Save the modifications by clicking on `Generate Project Content`.
+8.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
 
       ```
       struct freertos_sockaddr remote_addr;
@@ -87,14 +88,15 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/udp_transport_threadX.c`
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
-3. Select `New Stack -> Azure RTOS -> NetX Duo -> Protocols -> NetX Duo DHCP IPv4 Client`.
-4. Click on Add NetX Duo Packet Pool and select `Use g_packet_pool0 NetX Duo Packet Pool Instance`:
+3. Select `New Stack -> Networking -> Azure RTOS NetX Duo DHCP IPv4 Client`.
+4. Click on Add NetX Duo Network Driver and select `New -> NetX Duo Ethernet Driver (rm_netxduo_ether)`:
+5. Click on Add NetX Duo Packet Pool and select `Use -> g_packet_pool0 Azure RTOS NetX Duo Packet Pool Instance`:
 
    ![image](.images/ThreadX_DHCP_conf.png)
 
-5. *Optional: Increase number of buffers avaliable to the IP stack on `g_packet_pool0` properties on `Module g_packet_pool0 NetX Duo Packet Pool Instance -> Number of Packets in Pool`*.
-6.  Save the modifications by clicking on `Generate Project Content`.
-7.  Configure micro-ROS agent IP and port passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
+6. *Optional: Increase number of buffers avaliable to the IP stack on `g_packet_pool0` properties on `Module g_packet_pool0 Azure RTOS NetX Duo Packet Pool Instance -> Number of Packets in Pool`*.
+7.  Save the modifications by clicking on `Generate Project Content`.
+8.  Configure micro-ROS agent IP and port passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
 
       ```
       custom_transport_args remote_addr = {
