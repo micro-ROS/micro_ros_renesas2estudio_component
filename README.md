@@ -34,8 +34,8 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
 ## Requirements
 
 - [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio) for Linux<sup>1</sup>
-- FSP v3.2.1 board packs for Renesas e<sup>2</sup> studio: [Details](fps_install_packs.md).
-- GNU Arm Embedded Toolchain v9.3.1.20200408 (Other compatible toolchain may work).
+- FSP v3.5.0 board packs for Renesas e<sup>2</sup> studio: [Details](fps_install_packs.md).
+- GNU Arm Embedded Toolchain v10.3.1.20210824 (Other compatible toolchain may work).
 - [Install colcon](https://colcon.readthedocs.io/en/released/user/installation.html) and dependencies, for example with:
 
 ```bash
@@ -108,12 +108,12 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
    Configure `g_timer0` as an `r_agt`
       1. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
-      2. Select `New Stack -> Driver -> Timers -> Timer Driver on r_agt`.
-      3. Modify the clock period on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Period`) to `100`
-      3. Modify the clock period unit on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Period Unit`) to `Microseconds`
-      4. Modify the count source on the component properties (`Module g_timer0 Timer Driver on r_agt -> General -> Count Source`) to `PCLKB`
-      5. Modify the interrupt callback on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Callback`) to `micro_ros_timer_cb`
-      6. Modify the underflow interrupt priority on the component properties (`Module g_timer0 Timer Driver on r_agt -> Interrupt -> Underflow Interrupt Priority`) to `Priority 12`
+      2. Select `New Stack -> Driver -> Timers -> Timer, Low-Power (r_agt)`.
+      3. Modify the clock period on the component properties (`Module g_timer0 Timer, Low-Power (r_agt) -> General -> Period`) to `100`
+      3. Modify the clock period unit on the component properties (`Module g_timer0 Timer, Low-Power (r_agt) -> General -> Period Unit`) to `Microseconds`
+      4. Modify the count source on the component properties (`Module g_timer0 Timer, Low-Power (r_agt) -> General -> Count Source`) to `PCLKB`
+      5. Modify the interrupt callback on the component properties (`Module g_timer0 Timer, Low-Power (r_agt) -> Interrupt -> Callback`) to `micro_ros_timer_cb`
+      6. Modify the underflow interrupt priority on the component properties (`Module g_timer0 Timer, Low-Power (r_agt) -> Interrupt -> Underflow Interrupt Priority`) to `Priority 12`
 
          ![image](.images/Timer_configuration.png)
 
