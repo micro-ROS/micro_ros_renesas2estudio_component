@@ -16,6 +16,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
   - [Serial UART transport](#serial-uart-transport)
   - [UDP transport (FreeRTOS + TCP)](#udp-transport-freertos--tcp)
   - [UDP transport (ThreadX + NetX)](#udp-transport-threadx--netx)
+  - [TCP WIFI transport (AWS Secure Sockets - FreeRTOS)](#tcp-wifi-transport-aws-secure-sockets---freertos)
   - [CAN FD transport](#can-fd-transport)
 
 ## USB-CDC transport
@@ -112,6 +113,63 @@ Depending on which transport is used for micro-ROS specific configurations, the 
          renesas_e2_transport_write,
          renesas_e2_transport_read);
       ```
+
+## TCP WIFI transport (AWS Secure Sockets - FreeRTOS)
+
+1. Copy the following files to the source directory:
+      - `extra_sources/microros_transports/wifi_transport.c`
+
+2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
+3. Select `New Stack -> Networking -> AWS Secure Sockets on WiFi`.
+4. Remove the `AWS Secure Sockets TLS Support` submodule of the created module: `Right click -> Delete`
+5. Select `New Stack -> RTOS -> FreeRTOS Heap 4`.
+6. Configure the properties of the ` AWS Secure Sockets on WiFi`:
+   1. TODO
+
+7.  Save the modifications by clicking on `Generate Project Content`.
+8.  Configure the transport connection passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
+    1.  Configure the wifi network with a `WIFINetworkParams_t` object:
+         ```
+         // Configure wifi network
+         WIFINetworkParams_t network_conf = {
+            .ucChannel                  = 0,
+            .xPassword.xWPA.cPassphrase = "test_password",
+            .ucSSID  = "test_ssid",
+            .xSecurity = eWiFiSecurityWPA2,
+         };
+         ```
+
+         *Notes:*  
+            - *Currently only the following security protocols are supported: `eWiFiSecurityOpen`, `eWiFiSecurityWPA` and `eWiFiSecurityWPA2`*  
+            - *The network ssid and password lenght is limited to 31 characters*
+
+    2. Configure agent IP and port on a `SocketsSockaddr_t` object:
+         ```
+         // Configure agent address
+         SocketsSockaddr_t socket_addr = {
+               .ulAddress = SOCKETS_inet_addr_quick(192, 168, 1, 93),
+               .usPort    = SOCKETS_htons(8888)
+         };
+         ```
+
+    3. Add the configuration the a `custom_transport_args` struct and pass it down to the `rmw_uros_set_custom_transport` method:
+
+         ```
+         // Add configuration to transport args
+         custom_transport_args wifi_args = {
+            .network_conf = &network_conf,
+            .socket_addr = &socket_addr
+         };
+
+         rmw_uros_set_custom_transport(
+               false,
+               (void *) &wifi_args,
+               renesas_e2_transport_open,
+               renesas_e2_transport_close,
+               renesas_e2_transport_write,
+               renesas_e2_transport_read
+            );
+         ```
 
 ## CAN FD transport
 1. Copy the following files to the source directory:
