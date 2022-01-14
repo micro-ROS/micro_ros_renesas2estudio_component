@@ -69,7 +69,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 7.  Save the modifications by clicking on `Generate Project Content`.
 8.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
 
-      ```
+      ```c
       struct freertos_sockaddr remote_addr;
       remote_addr.sin_family = FREERTOS_AF_INET;
       remote_addr.sin_port = FreeRTOS_htons(8888);
@@ -99,7 +99,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 7.  Save the modifications by clicking on `Generate Project Content`.
 8.  Configure micro-ROS agent IP and port passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
 
-      ```
+      ```c
       custom_transport_args remote_addr = {
          .agent_ip_address=IP_ADDRESS(192,168,1,185),
          .agent_port=8888
@@ -121,7 +121,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
 3. Select `New Stack -> Networking -> AWS Secure Sockets on WiFi`.
-4. Remove the `AWS Secure Sockets TLS Support` submodule of the created module: `Right click -> Delete`
+4. Remove the `AWS Secure Sockets TLS Support` submodule of the created module: `Right click -> Delete`.
 5. Select `New Stack -> RTOS -> FreeRTOS Heap 4`.
 6. Configure the properties of the ` AWS Secure Sockets on WiFi`:
    1. TODO
@@ -129,7 +129,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 7.  Save the modifications by clicking on `Generate Project Content`.
 8.  Configure the transport connection passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
     1.  Configure the wifi network with a `WIFINetworkParams_t` object:
-         ```
+         ```c
          // Configure wifi network
          WIFINetworkParams_t network_conf = {
             .ucChannel                  = 0,
@@ -141,10 +141,10 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
          *Notes:*  
             - *Currently only the following security protocols are supported: `eWiFiSecurityOpen`, `eWiFiSecurityWPA` and `eWiFiSecurityWPA2`*  
-            - *The network ssid and password lenght is limited to 31 characters*
+            - *The network ssid and password length is limited to 31 characters*
 
     2. Configure agent IP and port on a `SocketsSockaddr_t` object:
-         ```
+         ```c
          // Configure agent address
          SocketsSockaddr_t socket_addr = {
                .ulAddress = SOCKETS_inet_addr_quick(192, 168, 1, 93),
@@ -154,7 +154,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
     3. Add the configuration the a `custom_transport_args` struct and pass it down to the `rmw_uros_set_custom_transport` method:
 
-         ```
+         ```c
          // Add configuration to transport args
          custom_transport_args wifi_args = {
             .network_conf = &network_conf,
@@ -207,7 +207,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
       ![image](.images/Bitrate_CAN_example.png)
 
    2. Make sure the configuration matches with the CAN used on the agent. Example configuration on linux:
-      ```
+      ```bash
       sudo ip link set can0 up type can bitrate 500000 sample-point 0.75 dbitrate 2000000 fd on
       sudo ifconfig can0 txqueuelen 65536
       ```
