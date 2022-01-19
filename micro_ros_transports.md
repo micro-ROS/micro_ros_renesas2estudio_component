@@ -50,8 +50,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
 3. Select `New Stack -> Networking -> FreeRTOS + TCP`.
-4. Select `New Stack -> RTOS -> FreeRTOS Heap 4`.
-5. Configure the properties of the `FreeRTOS + TCP component`:
+4. Configure the properties of the `FreeRTOS + TCP component`:
    1. `Common -> vApplicationIPNetworkEventHook` to `Disable`.
    2. `Common -> DHCP Register Hostname` to `Disable`.
    3. *Optional: Enable DHCP `Common -> Use DHCP` to `Enable`*.
@@ -62,12 +61,12 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
    ![image](.images/FreeRTOSTCP_conf.png)
 
-6. Increase number of Ethernet Tx buffers on `g_ether0 component -> Module g_ether0 Ethernet Driver on r_ether -> Buffers -> Number of RX buffer` to 4:
+5. Increase number of Ethernet Tx buffers on `g_ether0 component -> Module g_ether0 Ethernet Driver on r_ether -> Buffers -> Number of RX buffer` to 4:
 
    ![image](.images/FreeRTOSTCP_eth_conf.png)
 
-7.  Save the modifications by clicking on `Generate Project Content`.
-8.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
+6.  Save the modifications by clicking on `Generate Project Content`.
+7.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
 
       ```c
       struct freertos_sockaddr remote_addr;
@@ -126,9 +125,21 @@ Support for other wifi modules can be added to the FSP as explained on chapter `
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
 3. Select `New Stack -> Networking -> AWS Secure Sockets on WiFi`.
 4. Remove the `AWS Secure Sockets TLS Support` submodule of the created module: `Right click -> Delete`.
-5. Select `New Stack -> RTOS -> FreeRTOS Heap 4`.
-6. Configure the properties of the ` AWS Secure Sockets on WiFi`:
-   1. TODO
+5. Configure the module reset pinout on the `rm_wifi_onchip_silex` module properties:
+   1. Set `Common -> Module Reset Port` to 3.
+   2. Set `Common -> Module Reset Pin` to 11.
+6. Configure the properties of the PMOD connection under the UART component properties (`g_uart0 UART (r_sci_uart)`)
+   1. Enter Enable `FIFO support`, `DTC support` and `Flow control support` on `common` properties
+   2. Add `DTC drivers` for Transmission and Reception:
+
+      <img src=".images/Wifi_DTC.png" alt="drawing" width="1000"/>
+
+   1. Select the SCI port 9 on `Module g_uart0 UART (r_sci_uart) -> General -> Channel`.
+   2. Configure the SCI port and its pinout:
+
+      ![image](.images/PMOD_conf.png)
+
+*Note: This configuration is valid for the connector PMOD1*
 
 7.  Save the modifications by clicking on `Generate Project Content`.
 8.  Configure the transport connection passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:

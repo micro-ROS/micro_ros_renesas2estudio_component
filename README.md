@@ -142,7 +142,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
    Create and configure the micro-ROS FreeRTOS task:
 
       1. On the `configuration.xml` menu, go to the `Stacks` tab and create a new thread for micro-ROS.
-      2. Click on the created thread, then select `New Stack -> FreeRTOS -> Memory Management -> Heap 4`.
+      2. Click on the created thread, then select `New Stack -> RTOS -> FreeRTOS Heap 4`.
       3. Configure the micro-ROS thread properties:
          1. Set the name of the thread entry function under `Thread -> Symbol` to `micro_ros_thread`.
          2. Set `Thread -> Stack size (bytes)` to 5000 B.
