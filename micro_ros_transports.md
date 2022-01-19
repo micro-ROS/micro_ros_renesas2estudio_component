@@ -133,8 +133,8 @@ Depending on which transport is used for micro-ROS specific configurations, the 
          // Configure wifi network
          WIFINetworkParams_t network_conf = {
             .ucChannel                  = 0,
-            .xPassword.xWPA.cPassphrase = "test_password",
-            .ucSSID  = "test_ssid",
+            .ucSSID  = "[YOUR_SSID_HERE]",
+            .xPassword.xWPA.cPassphrase = "[YOUR_PSK_HERE]",
             .xSecurity = eWiFiSecurityWPA2,
          };
          ```
