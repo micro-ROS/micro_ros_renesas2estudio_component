@@ -46,8 +46,8 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport) {
     SocketsSockaddr_t * socket_addr = (SocketsSockaddr_t *) args->socket_addr;
 
     // Set network struct length values. TODO: could strlen be problematic?
-    network_conf->xPassword.xWPA.ucLength = (uint8_t) strlen(network_conf->xPassword.xWPA.cPassphrase);
-    network_conf->ucSSIDLength            = (uint8_t) strlen(network_conf->ucSSID);
+    network_conf->xPassword.xWPA.ucLength = (uint8_t) strlen((char *) network_conf->xPassword.xWPA.cPassphrase);
+    network_conf->ucSSIDLength            = (uint8_t) strlen((char *) network_conf->ucSSID);
 
     WIFIReturnCode_t wifi_err = WIFI_On();
 
@@ -149,6 +149,7 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
 
 size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err) {
     (void) transport;
+    (void) len;
 
     static tcp_receiver_t receiver = {};
     size_t rv = 0;
@@ -192,7 +193,7 @@ void read_tcp_data(tcp_receiver_t * receiver) {
       bytes_received = SOCKETS_Recv(xSocket, (void*) &receiver->length_buffer[0], 2, 0);
       if (bytes_received >= 2)
       {
-        receiver->message_size = (receiver->length_buffer[0] | (receiver->length_buffer[1] << 8));
+        receiver->message_size = (uint16_t)(receiver->length_buffer[0] | (receiver->length_buffer[1] << 8));
         receiver->message_size_received = 0;
         receiver->state = STATE_WAIT_FOR_DATA;
       }
@@ -201,7 +202,7 @@ void read_tcp_data(tcp_receiver_t * receiver) {
     case STATE_WAIT_FOR_DATA:
       to_read = receiver->message_size - receiver->message_size_received;
       bytes_received = SOCKETS_Recv(xSocket, (void*) &receiver->buffer[receiver->message_size_received], to_read, 0);
-      receiver->message_size_received += bytes_received;
+      receiver->message_size_received += (uint16_t) bytes_received;
 
       if(receiver->message_size_received == receiver->message_size){
         receiver->state = STATE_MESSAGE_AVAILABLE;
