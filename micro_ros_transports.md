@@ -137,8 +137,8 @@ Support for other wifi modules can be added to the FSP as explained on chapter `
          // Configure wifi network
          WIFINetworkParams_t network_conf = {
             .ucChannel                  = 0,
-            .xPassword.xWPA.cPassphrase = "test_password",
-            .ucSSID  = "test_ssid",
+            .ucSSID  = "[YOUR_SSID_HERE]",
+            .xPassword.xWPA.cPassphrase = "[YOUR_PSK_HERE]",
             .xSecurity = eWiFiSecurityWPA2,
          };
          ```
