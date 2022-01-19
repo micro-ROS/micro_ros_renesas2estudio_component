@@ -119,30 +119,33 @@ This transport supports Renesas [Wi-Fi-Pmod-Expansion-Board](https://www.renesas
 Support for other wifi modules can be added to the FSP as explained on chapter `4. Adding Support for New Wi-Fi module` of this document: 
 [Getting Started with the Wi-Fi Modules on FSP](https://www.renesas.com/eu/en/document/apn/getting-started-wi-fi-modules-fsp)
 
+ *Note: This configuration is valid for the connector PMOD1 (J26)*
+
 1. Copy the following files to the source directory:
-      - `extra_sources/microros_transports/wifi_transport.c`
+      - `extra_sources/microros_transports/wifi_transport_freeRTOS.c`
 
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
 3. Select `New Stack -> Networking -> AWS Secure Sockets on WiFi`.
 4. Remove the `AWS Secure Sockets TLS Support` submodule of the created module: `Right click -> Delete`.
-5. Configure the module reset pinout on the `rm_wifi_onchip_silex` module properties:
+5. Enable `Common -> General -> Use Mutexes` on the micro-ROS thread properties.
+6. Configure the module reset pinout on the `rm_wifi_onchip_silex` module properties:
    1. Set `Common -> Module Reset Port` to 3.
    2. Set `Common -> Module Reset Pin` to 11.
-6. Configure the properties of the PMOD connection under the UART component properties (`g_uart0 UART (r_sci_uart)`)
+7. Configure the properties of the PMOD connection under the UART component properties (`g_uart0 UART (r_sci_uart)`)
    1. Enter Enable `FIFO support`, `DTC support` and `Flow control support` on `common` properties
    2. Add `DTC drivers` for Transmission and Reception:
 
       <img src=".images/Wifi_DTC.png" alt="drawing" width="1000"/>
 
-   1. Select the SCI port 9 on `Module g_uart0 UART (r_sci_uart) -> General -> Channel`.
-   2. Configure the SCI port and its pinout:
+   3. Select the SCI port 9 on `Module g_uart0 UART (r_sci_uart) -> General -> Channel`.
+   4. Go to the Pins tab and configure the SCI port and its pinout:
 
       ![image](.images/PMOD_conf.png)
 
-*Note: This configuration is valid for the connector PMOD1*
+   *Optional: in order to set P203 and P202 as Tx/Rx first disable SPI0*
 
-7.  Save the modifications by clicking on `Generate Project Content`.
-8.  Configure the transport connection passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
+8.  Save the modifications by clicking on `Generate Project Content`.
+9.  Configure the transport connection passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
     1.  Configure the wifi network with a `WIFINetworkParams_t` object:
          ```c
          // Configure wifi network
