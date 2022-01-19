@@ -116,6 +116,10 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
 ## TCP WIFI transport (AWS Secure Sockets - FreeRTOS)
 
+This transport supports Renesas [Wi-Fi-Pmod-Expansion-Board](https://www.renesas.com/eu/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus/wi-fi-pmod-expansion-board-80211bgn-24g-wi-fi-pmod-expansion-board) based on Silex SX-ULPGN module.  
+Support for other wifi modules can be added to the FSP as explained on chapter `4. Adding Support for New Wi-Fi module` of this document: 
+[Getting Started with the Wi-Fi Modules on FSP](https://www.renesas.com/eu/en/document/apn/getting-started-wi-fi-modules-fsp)
+
 1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/wifi_transport.c`
 
