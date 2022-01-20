@@ -95,6 +95,9 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport) {
         return false;
     }
 
+    // Set write timeout
+    TickType_t timeout_ticks = pdMS_TO_TICKS(100);
+    SOCKETS_SetSockOpt(xSocket, 0, SOCKETS_SO_SNDTIMEO, &timeout_ticks, 0);
 
     return true;
 }
