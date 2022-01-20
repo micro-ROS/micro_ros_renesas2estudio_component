@@ -51,6 +51,12 @@ void *pvPortRealloc(void *pointer, size_t xWantedSize)
         if (pointer != NULL && (pxLink->xBlockSize & xBlockAllocatedBit) != 0)
         {
             size_t pv_size = pxLink->xBlockSize & ~xBlockAllocatedBit;
+
+            if (xWantedSize < pv_size)
+            {
+                pv_size = xWantedSize;
+            }
+
             memcpy(ptr, pointer, pv_size);
             vPortFree(pointer);
         }
