@@ -5,7 +5,8 @@
 #include <stddef.h>
 #include "hal_data.h"
 
-#ifdef FREERTOSIPCONFIG_H_
+#if (BSP_CFG_RTOS == 2)
+// FreeRTOS
 #define MICROROS_FREERTOS_ALLOCATORS
 #endif
 
