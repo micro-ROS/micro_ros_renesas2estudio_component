@@ -16,6 +16,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
   - [Serial UART transport](#serial-uart-transport)
   - [UDP transport (FreeRTOS + TCP)](#udp-transport-freertos--tcp)
   - [UDP transport (ThreadX + NetX)](#udp-transport-threadx--netx)
+  - [TCP WIFI transport (AWS Secure Sockets - FreeRTOS)](#tcp-wifi-transport-aws-secure-sockets---freertos)
   - [CAN FD transport](#can-fd-transport)
 
 ## USB-CDC transport
@@ -49,8 +50,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
 3. Select `New Stack -> Networking -> FreeRTOS + TCP`.
-4. Select `New Stack -> RTOS -> FreeRTOS Heap 4`.
-5. Configure the properties of the `FreeRTOS + TCP component`:
+4. Configure the properties of the `FreeRTOS + TCP component`:
    1. `Common -> vApplicationIPNetworkEventHook` to `Disable`.
    2. `Common -> DHCP Register Hostname` to `Disable`.
    3. *Optional: Enable DHCP `Common -> Use DHCP` to `Enable`*.
@@ -61,14 +61,14 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 
    ![image](.images/FreeRTOSTCP_conf.png)
 
-6. Increase number of Ethernet Tx buffers on `g_ether0 component -> Module g_ether0 Ethernet Driver on r_ether -> Buffers -> Number of RX buffer` to 4:
+5. Increase number of Ethernet Tx buffers on `g_ether0 component -> Module g_ether0 Ethernet Driver on r_ether -> Buffers -> Number of RX buffer` to 4:
 
    ![image](.images/FreeRTOSTCP_eth_conf.png)
 
-7.  Save the modifications by clicking on `Generate Project Content`.
-8.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
+6.  Save the modifications by clicking on `Generate Project Content`.
+7.  Configure micro-ROS agent IP and port passing a freeRTOS `freertos_sockaddr` struct to the `rmw_uros_set_custom_transport` function:
 
-      ```
+      ```c
       struct freertos_sockaddr remote_addr;
       remote_addr.sin_family = FREERTOS_AF_INET;
       remote_addr.sin_port = FreeRTOS_htons(8888);
@@ -98,7 +98,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 7.  Save the modifications by clicking on `Generate Project Content`.
 8.  Configure micro-ROS agent IP and port passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
 
-      ```
+      ```c
       custom_transport_args remote_addr = {
          .agent_ip_address=IP_ADDRESS(192,168,1,185),
          .agent_port=8888
@@ -112,6 +112,82 @@ Depending on which transport is used for micro-ROS specific configurations, the 
          renesas_e2_transport_write,
          renesas_e2_transport_read);
       ```
+
+## TCP WIFI transport (AWS Secure Sockets - FreeRTOS)
+
+This transport supports Renesas [Wi-Fi-Pmod-Expansion-Board](https://www.renesas.com/eu/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus/wi-fi-pmod-expansion-board-80211bgn-24g-wi-fi-pmod-expansion-board) based on Silex SX-ULPGN module.  
+Support for other wifi modules can be added to the FSP as explained on chapter `4. Adding Support for New Wi-Fi module` of this document: 
+[Getting Started with the Wi-Fi Modules on FSP](https://www.renesas.com/eu/en/document/apn/getting-started-wi-fi-modules-fsp)
+
+ *Note: This configuration is valid for the connector PMOD1 (J26)*
+
+1. Copy the following files to the source directory:
+      - `extra_sources/microros_transports/wifi_transport_freeRTOS.c`
+
+2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
+3. Select `New Stack -> Networking -> AWS Secure Sockets on WiFi`.
+4. Remove the `AWS Secure Sockets TLS Support` submodule of the created module: `Right click -> Delete`.
+5. Enable `Common -> General -> Use Mutexes` on the micro-ROS thread properties.
+6. Configure the module reset pinout on the `rm_wifi_onchip_silex` module properties:
+   1. Set `Common -> Module Reset Port` to 3.
+   2. Set `Common -> Module Reset Pin` to 11.
+7. Configure the properties of the PMOD connection under the UART component properties (`g_uart0 UART (r_sci_uart)`)
+   1. Enter Enable `FIFO support`, `DTC support` and `Flow control support` on `common` properties
+   2. Add `DTC drivers` for Transmission and Reception:
+
+      <img src=".images/Wifi_DTC.png" alt="drawing" width="1000"/>
+
+   3. Select the SCI port 9 on `Module g_uart0 UART (r_sci_uart) -> General -> Channel`.
+   4. Go to the Pins tab and configure the SCI port and its pinout:
+
+      ![image](.images/PMOD_conf.png)
+
+   *Optional: in order to set P203 and P202 as Tx/Rx first disable SPI0*
+
+8.  Save the modifications by clicking on `Generate Project Content`.
+9.  Configure the transport connection passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
+    1.  Configure the wifi network with a `WIFINetworkParams_t` object:
+         ```c
+         // Configure wifi network
+         WIFINetworkParams_t network_conf = {
+            .ucChannel                  = 0,
+            .ucSSID  = "[YOUR_SSID_HERE]",
+            .xPassword.xWPA.cPassphrase = "[YOUR_PSK_HERE]",
+            .xSecurity = eWiFiSecurityWPA2,
+         };
+         ```
+
+         *Notes:*  
+            - *Currently only the following security protocols are supported: `eWiFiSecurityOpen`, `eWiFiSecurityWPA` and `eWiFiSecurityWPA2`*  
+            - *The network ssid and password length is limited to 31 characters*
+
+    2. Configure agent IP and port on a `SocketsSockaddr_t` object:
+         ```c
+         // Configure agent address
+         SocketsSockaddr_t socket_addr = {
+               .ulAddress = SOCKETS_inet_addr_quick(192, 168, 1, 93),
+               .usPort    = SOCKETS_htons(8888)
+         };
+         ```
+
+    3. Add the configuration the a `custom_transport_args` struct and pass it down to the `rmw_uros_set_custom_transport` method:
+
+         ```c
+         // Add configuration to transport args
+         custom_transport_args wifi_args = {
+            .network_conf = &network_conf,
+            .socket_addr = &socket_addr
+         };
+
+         rmw_uros_set_custom_transport(
+               false,
+               (void *) &wifi_args,
+               renesas_e2_transport_open,
+               renesas_e2_transport_close,
+               renesas_e2_transport_write,
+               renesas_e2_transport_read
+            );
+         ```
 
 ## CAN FD transport
 1. Copy the following files to the source directory:
@@ -149,7 +225,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
       ![image](.images/Bitrate_CAN_example.png)
 
    2. Make sure the configuration matches with the CAN used on the agent. Example configuration on linux:
-      ```
+      ```bash
       sudo ip link set can0 up type can bitrate 500000 sample-point 0.75 dbitrate 2000000 fd on
       sudo ifconfig can0 txqueuelen 65536
       ```
