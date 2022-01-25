@@ -142,7 +142,10 @@ Support for other wifi modules can be added to the FSP as explained on chapter `
 
       ![image](.images/PMOD_conf.png)
 
-   *Optional: in order to set P203 and P202 as Tx/Rx first disable SPI0*
+      *Optional: in order to set P203 and P202 as Tx/Rx first disable SPI0*
+
+   5. *Optional: To increase data throughput, increase the baud rate on `Module g_uart0 UART (r_sci_uart) -> Baud -> Baud Rate`.  
+      Values up to `460800 bauds` has been tested*
 
 8.  Save the modifications by clicking on `Generate Project Content`.
 9.  Configure the transport connection passing a `custom_transport_args` struct to the `rmw_uros_set_custom_transport` function:
