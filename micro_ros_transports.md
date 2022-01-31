@@ -32,6 +32,12 @@ Depending on which transport is used for micro-ROS specific configurations, the 
 5. Save the modifications by clicking on `Generate Project Content`.
 
 ## Serial UART transport
+
+The configuration of this transports is board dependant:
+
+<details>
+<summary>EK-RA6M5</summary>
+
 1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/uart_transport.c`
 2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
@@ -42,6 +48,30 @@ Depending on which transport is used for micro-ROS specific configurations, the 
    ![image](.images/Configure_serial.png)
 
 6. Save the modifications clicking on `Generate Project Content`.
+
+</details>
+
+<details>
+<summary>MCK-RA6T2</summary>
+
+   1. Copy the following files to the source directory:
+      - `extra_sources/microros_transports/uart_transport.c`
+   2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
+   3. Select `New Stack -> Driver -> Connectivity -> r_src_b_uart`.
+   4. Go to `Clocks` tab and enable `SCISPICLK` clock.
+
+      *Example clock configuration:*
+
+      ![image](.images/Configure_UART_clock.png)
+
+   5. Go to the Pins tab and configure the SCI port 0 and its pinout:
+
+      ![image](.images/UART_RA6T2_conf.png)
+
+      *Optional: in order to set PA09 and PA10 as Tx/Rx first disable the timers GPT8 and GPT9*
+
+   6. Save the modifications clicking on `Generate Project Content`.
+</details>
 
 ## UDP transport (FreeRTOS + TCP)
 
@@ -217,10 +247,12 @@ Support for other wifi modules can be added to the FSP as explained on chapter `
    3. Enable all interrupts on `Module g_canfd0 CANFD Driver on r_canfd -> Channel Error Interrupts`.
 
 7. Configure CAN component:
-   1. `Module g_canfd0 CANFD Driver on r_canfd -> General -> Channel` to `1`.
+   1. `Module g_canfd0 CANFD Driver on r_canfd -> General -> Channel` to `1` for `RA6M5` boards and to `0` for `RA6T2`.
    2. Go to the Pins tab and configure your `CANFD1` pinout. As an example to use with the integrated `TJA1042T` transceiver:
 
       ![image](.images/CAN_pinout.png)
+
+      *Note: `TJA1042T` transceiver is only integrated on `EK-RA6M5` boards*
 
 8. Configure your CAN FD Bitrate:
    1. As an example:
