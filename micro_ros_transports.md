@@ -52,7 +52,7 @@ The configuration of this transports is board dependant:
 </details>
 
 <details>
-<summary>MCK-RA6T2:</summary>
+<summary>MCK-RA6T2</summary>
 
    1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/uart_transport.c`
