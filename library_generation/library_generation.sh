@@ -46,6 +46,13 @@ else
     make -f libmicroros.mk rebuild_metas
 fi
 
+######## Fix include paths  ########
+INCLUDE_ROS2_PACKAGES=( rmw rcl rcl_action rcl_lifecycle rcl_logging_interface )
+for var in "${INCLUDE_ROS2_PACKAGES[@]}"; do
+    mv $BASE_PATH/libmicroros/include/${var}/${var}/* $BASE_PATH/libmicroros/include/${var}
+    rm -rf $BASE_PATH/libmicroros/include/${var}/${var}
+done
+
 ######## Generate extra files ########
 find $BASE_PATH/libmicroros/micro_ros_src/src \( -name "*.srv" -o -name "*.msg" -o -name "*.action" \) | awk -F"/" '{print $(NF-2)"/"$NF}' > $BASE_PATH/libmicroros/available_ros2_types
 
