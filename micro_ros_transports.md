@@ -229,7 +229,7 @@ Support for other wifi modules can be added to the FSP as explained on chapter `
 3. Select `New Stack -> Driver -> Connectivity -> r_canfd`.
 4. Go to `Clocks` tab:
    1. Configure `CANFDCLK` clock to match 40 MHz.
-   2. Make sure `PCLKB` clock value doubles value of `PCLKA`.
+   2. Make sure `PCLKA` clock value doubles value of `PCLKB`.
 
       *Example clock configuration: `PCLKB = 50 MHz` and `PCLKA = 100 MHz`*
 
