@@ -50,7 +50,7 @@ void *pvPortRealloc(void *pointer, size_t xWantedSize)
         // Copy and free *pointer memory
         if (pointer != NULL && (pxLink->xBlockSize & xBlockAllocatedBit) != 0)
         {
-            size_t pv_size = pxLink->xBlockSize & ~xBlockAllocatedBit;
+            size_t pv_size = (pxLink->xBlockSize & ~xBlockAllocatedBit) - xHeapStructSize;
 
             if (xWantedSize < pv_size)
             {
