@@ -39,7 +39,7 @@ void *pvPortRealloc(void *pointer, size_t xWantedSize)
     }
 
     void *ptr = pvPortMalloc(xWantedSize);
-    if (ptr)
+    if (ptr != NULL && pointer != NULL)
     {
         // Get size of pv
         uint8_t *puc = (uint8_t *) pointer;
@@ -48,9 +48,9 @@ void *pvPortRealloc(void *pointer, size_t xWantedSize)
         BlockLink_t *pxLink = (void *) puc;
 
         // Copy and free *pointer memory
-        if (pointer != NULL && (pxLink->xBlockSize & xBlockAllocatedBit) != 0)
+        if ((pxLink->xBlockSize & xBlockAllocatedBit) != 0)
         {
-            size_t pv_size = pxLink->xBlockSize & ~xBlockAllocatedBit;
+            size_t pv_size = (pxLink->xBlockSize & ~xBlockAllocatedBit) - xHeapStructSize;
 
             if (xWantedSize < pv_size)
             {
