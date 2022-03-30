@@ -53,8 +53,10 @@ popd > /dev/null
 
 apt -y install rsync
 for var in ${INCLUDE_ROS2_PACKAGES}; do
-    rsync -r $BASE_PATH/libmicroros/include/${var}/${var}/* $BASE_PATH/libmicroros/include/${var}
-    rm -rf $BASE_PATH/libmicroros/include/${var}/${var}
+    if [ -d "$BASE_PATH/libmicroros/include/${var}/${var}" ]; then
+        rsync -r $BASE_PATH/libmicroros/include/${var}/${var}/* $BASE_PATH/libmicroros/include/${var}
+        rm -rf $BASE_PATH/libmicroros/include/${var}/${var}
+    fi
 done
 
 ######## Generate extra files ########
