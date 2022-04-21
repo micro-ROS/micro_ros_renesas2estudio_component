@@ -1,5 +1,5 @@
-![banner](.images/banner-dark-theme.png#gh-dark-mode-only)
-![banner](.images/banner-dark-theme.png#gh-light-mode-only)
+![banner](.images/banner-dark-theme.svg#gh-dark-mode-only)
+![banner](.images/banner-dark-theme.svg#gh-light-mode-only)
 
 # micro-ROS for Renesas e<sup>2</sup> studio
 
