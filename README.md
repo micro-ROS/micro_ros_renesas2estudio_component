@@ -1,12 +1,5 @@
-<br/>
-
-<a>
-   <p align="center">
-      <img width="40%" src=".images/renesas_logo.gif">
-      <img width="40%" src=".images/microros_logo.png">
-   </p>
-</a>
-<br/>
+![banner](.images/banner-dark-theme.png#gh-dark-mode-only)
+![banner](.images/banner-dark-theme.png#gh-light-mode-only)
 
 # micro-ROS for Renesas e<sup>2</sup> studio
 
