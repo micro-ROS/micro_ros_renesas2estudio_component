@@ -157,6 +157,11 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
     static tcp_receiver_t receiver = {};
     size_t rv = 0;
 
+    if (timeout == 0)
+    {
+    	  timeout = 1;
+    }
+
     do
     {
         // Set read timeout
@@ -167,7 +172,7 @@ size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* 
         read_tcp_data(&receiver);
         timeout -= (int)(uxr_millis() - time_init);
     }
-    while ((STATE_MESSAGE_AVAILABLE != receiver.state) && (0 < timeout));
+    while ((STATE_MESSAGE_AVAILABLE != receiver.state) && (1 < timeout));
 
     if (STATE_MESSAGE_AVAILABLE == receiver.state)
     {
