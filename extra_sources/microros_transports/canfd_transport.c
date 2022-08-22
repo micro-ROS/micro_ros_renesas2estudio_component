@@ -134,6 +134,7 @@ void canfd0_callback(can_callback_args_t *p_args)
         case CAN_EVENT_ERR_CHANNEL:             // Channel error has occurred.
         case CAN_EVENT_TX_ABORTED:              // Transmit abort event.
         case CAN_EVENT_ERR_GLOBAL:              // Global error has occurred.
+        default:
         {
             g_error = true;
             break;
@@ -194,7 +195,8 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
         return 0;
     }
 
-    while (!g_write_complete && !g_error) {
+    int64_t start = uxr_millis();
+    while (!g_write_complete && !g_error && (uxr_millis() -  start) < WRITE_TIMEOUT) {
         R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
     }
 

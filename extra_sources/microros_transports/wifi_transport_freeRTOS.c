@@ -35,6 +35,7 @@ typedef struct {
 } tcp_receiver_t;
 
 static bool net_init = false;
+static bool wifi_init = false;
 
 void read_tcp_data(tcp_receiver_t * receiver);
 Socket_t xSocket;
@@ -55,6 +56,8 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport) {
     {
         return false;
     }
+
+    wifi_init = true;
 
     // Connect to wifi. TODO: Check timeouts or retries
     wifi_err = WIFI_ConnectAP(network_conf);
@@ -96,7 +99,7 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport) {
     }
 
     // Set write timeout
-    TickType_t timeout_ticks = pdMS_TO_TICKS(100);
+    TickType_t timeout_ticks = pdMS_TO_TICKS(WRITE_TIMEOUT);
     SOCKETS_SetSockOpt(xSocket, 0, SOCKETS_SO_SNDTIMEO, &timeout_ticks, 0);
 
     return true;
@@ -104,15 +107,14 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport) {
 
 bool renesas_e2_transport_close(struct uxrCustomTransport * transport) {
     (void) transport;
-
     (void) SOCKETS_Close(xSocket);
-    (void) WIFI_Off();
 
-    // TODO: Add checks?
-    // 0 == SOCKETS_Close(xSocket);
-    // eWiFiSuccess == WIFI_Off();
+    if (wifi_init && eWiFiSuccess == WIFI_Off())
+    {
+		    wifi_init = false;
+    }
 
-    return true;
+    return !wifi_init;
 }
 
 size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const uint8_t * buf, size_t len, uint8_t * err) {

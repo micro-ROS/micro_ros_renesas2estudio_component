@@ -65,6 +65,9 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     xSocket = FreeRTOS_socket(FREERTOS_AF_INET, FREERTOS_SOCK_DGRAM, FREERTOS_IPPROTO_UDP);
     if (FREERTOS_INVALID_SOCKET != xSocket)
     {
+        // Set write timeout
+        TickType_t timeout_ticks = pdMS_TO_TICKS(WRITE_TIMEOUT);
+        FreeRTOS_setsockopt(xSocket, 0, FREERTOS_SO_RCVTIMEO, &timeout_ticks, 0);
         rv = true;
     }
 

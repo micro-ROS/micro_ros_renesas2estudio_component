@@ -24,7 +24,7 @@ uint8_t g_ip0_arp_cache_memory[G_IP0_ARP_CACHE_SIZE] BSP_ALIGN_VARIABLE(4);
 // Stack memory for g_ip0 Packet pool.
 uint8_t g_packet_pool0_pool_memory[G_PACKET_POOL0_PACKET_NUM * (G_PACKET_POOL0_PACKET_SIZE + sizeof(NX_PACKET))] BSP_ALIGN_VARIABLE(4) ETHER_BUFFER_PLACE_IN_SECTION;
 
-#define LINK_ENABLE_WAIT_TIME (1000U)
+#define LINK_ENABLE_WAIT_TIME (2000U)
 #define SOCKET_FIFO_SIZE G_PACKET_POOL0_PACKET_NUM
 
 // Set TX_TIMER_TICKS_PER_SECOND to 1000 (1 ms tick) in thread conf
@@ -63,7 +63,7 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
             G_PACKET_POOL0_PACKET_SIZE,
             &g_packet_pool0_pool_memory[0],
             G_PACKET_POOL0_PACKET_NUM * (G_PACKET_POOL0_PACKET_SIZE + sizeof(NX_PACKET)));
-    
+
     if(NX_SUCCESS != status)
     {
         return false;
@@ -122,7 +122,7 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport){
     nx_dhcp_start(&g_dhcp_client0);
 
     // Wait for the link to be enabled.
-    ULONG current_state;
+    ULONG current_state = 0;
 	ULONG needed_state = NX_IP_UDP_ENABLED | NX_IP_ARP_ENABLED | NX_IP_LINK_ENABLED | NX_IP_ADDRESS_RESOLVED;
     status = nx_ip_status_check(&g_ip0, needed_state, &current_state, LINK_ENABLE_WAIT_TIME);
 
