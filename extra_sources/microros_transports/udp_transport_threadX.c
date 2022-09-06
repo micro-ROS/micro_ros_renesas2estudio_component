@@ -24,7 +24,7 @@ uint8_t g_ip0_arp_cache_memory[G_IP0_ARP_CACHE_SIZE] BSP_ALIGN_VARIABLE(4);
 // Stack memory for g_ip0 Packet pool.
 uint8_t g_packet_pool0_pool_memory[G_PACKET_POOL0_PACKET_NUM * (G_PACKET_POOL0_PACKET_SIZE + sizeof(NX_PACKET))] BSP_ALIGN_VARIABLE(4) ETHER_BUFFER_PLACE_IN_SECTION;
 
-#define LINK_ENABLE_WAIT_TIME (2000U)
+#define LINK_ENABLE_WAIT_TIME (TX_WAIT_FOREVER)
 #define SOCKET_FIFO_SIZE G_PACKET_POOL0_PACKET_NUM
 
 // Set TX_TIMER_TICKS_PER_SECOND to 1000 (1 ms tick) in thread conf
