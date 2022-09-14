@@ -195,7 +195,7 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 
 ## Adding custom packages to the micro-ROS build
 
-In order to include a custom package in the micro-ROS build, just copy the package folder into `library_generation/extra_packages` folder. The build system will automatically detect the package and build it alogn with the micro-ROS library.
+In order to include a custom package in the micro-ROS build, just copy the package folder into `library_generation/extra_packages` folder. The build system will automatically detect the package and build it along with the micro-ROS library.
 
 ## License
 
