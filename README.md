@@ -14,6 +14,7 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
   - [Getting started](#getting-started)
   - [Using the micro-ROS Agent](#using-the-micro-ros-agent)
   - [Integrating micro-ROS in your project](#integrating-micro-ros-in-your-project)
+  - [Adding custom packages to the micro-ROS build](#adding-custom-packages-to-the-micro-ros-build)
   - [License](#license)
   - [Known Issues / Limitations](#known-issues--limitations)
 
@@ -191,6 +192,11 @@ cd ../micro_ros_renesas2estudio_component/library_generation && ./library_genera
 10. Add micro-ROS code in your codebase.
 
 11. **Build and run** your project.
+
+## Adding custom packages to the micro-ROS build
+
+In order to include a custom package in the micro-ROS build, just copy the package folder into `library_generation/extra_packages` folder. The build system will automatically detect the package and build it alogn with the micro-ROS library.
+
 ## License
 
 This repository is open-sourced under the Apache-2.0 license. See the [LICENSE](LICENSE) file for details.
