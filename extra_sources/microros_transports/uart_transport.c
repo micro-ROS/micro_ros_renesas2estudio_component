@@ -86,7 +86,8 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
         return 0;
     }
 
-    while(!g_write_complete)
+    int64_t start = uxr_millis();
+    while(!g_write_complete && (uxr_millis() -  start) < WRITE_TIMEOUT)
     {
         R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MICROSECONDS);
     }
