@@ -4,6 +4,8 @@
 #include <uxr/client/transport.h>
 #include "hal_data.h"
 
+#define WRITE_TIMEOUT 10U
+
 #ifdef NX_API_H
 typedef struct custom_transport_args {
     ULONG agent_ip_address;

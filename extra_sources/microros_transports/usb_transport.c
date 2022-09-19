@@ -133,7 +133,7 @@ size_t renesas_e2_transport_write(struct uxrCustomTransport* transport, const ui
     (void) transport;
     (void) error;
 
-    return handle_usb(USB_WRITE, (uint8_t *) buf, len, USB_NO_TIMEOUT);
+    return handle_usb(USB_WRITE, (uint8_t *) buf, len, WRITE_TIMEOUT);
 }
 
 size_t renesas_e2_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* error){
