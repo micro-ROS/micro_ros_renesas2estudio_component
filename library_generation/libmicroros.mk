@@ -66,7 +66,7 @@ $(INSTALL_DIR)/micro_ros_src/src:
 	git clone -b rolling https://github.com/ros2/example_interfaces src/example_interfaces; \
 	git clone -b rolling https://github.com/ros2/rosidl_core src/rosidl_core; \
     touch src/rosidl/rosidl_typesupport_introspection_cpp/COLCON_IGNORE; \
-    touch src/rcl_logging/rcl_logging_log4cxx/COLCON_IGNORE; \
+    touch src/ros2_tracing/test_tracetools/COLCON_IGNORE; \
     touch src/rcl_logging/rcl_logging_spdlog/COLCON_IGNORE; \
     touch src/rclc/rclc_examples/COLCON_IGNORE; \
 	touch src/rcl/rcl_yaml_param_parser/COLCON_IGNORE; \
