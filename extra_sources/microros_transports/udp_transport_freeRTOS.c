@@ -13,21 +13,15 @@
 #include <stdbool.h>
 
 // FreeRTOS MAC will be copied from g_ether0 configured value.
-static  uint8_t ucMACAddress[ 6 ]       = {0x00};
+static uint8_t ucMACAddress[ 6 ]       = {0x00};
 
-#if( ipconfigUSE_DHCP != 0 )
-    // DHCP enabled, this values will be automatically populated with the received IP address.
-    static  uint8_t ucIPAddress[ 4 ]        = {0x00};
-    static  uint8_t ucNetMask[ 4 ]          = {0x00};
-    static  uint8_t ucGatewayAddress[ 4 ]   = {0x00};
-    static  uint8_t ucDNSServerAddress[ 4 ] = {0x00};
-#else
-    // DHCP disabled, configure the board static IP address.
-    static  uint8_t ucIPAddress[ 4 ]        = {192, 168, 1, 180};
-    static  uint8_t ucNetMask[ 4 ]          = {255, 255, 255, 0};
-    static  uint8_t ucGatewayAddress[ 4 ]   = {0, 0, 0, 0};
-    static  uint8_t ucDNSServerAddress[ 4 ] = {10, 60, 1, 2};
-#endif
+// Default IP configuration.
+// - This values will be used as the board static IP address if DHCP is disabled.
+// - If DHCP is enabled, they will be override with the received IP address.
+static uint8_t ucIPAddress[ 4 ]        = {192, 168, 1, 180};
+static uint8_t ucNetMask[ 4 ]          = {255, 255, 255, 0};
+static uint8_t ucGatewayAddress[ 4 ]   = {0, 0, 0, 0};
+static uint8_t ucDNSServerAddress[ 4 ] = {10, 60, 1, 2};
 
 struct freertos_sockaddr *remote_addr;
 Socket_t xSocket;

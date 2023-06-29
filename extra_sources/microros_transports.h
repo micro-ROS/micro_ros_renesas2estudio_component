@@ -11,12 +11,11 @@ typedef struct custom_transport_args {
     ULONG agent_ip_address;
     UINT agent_port;
 } custom_transport_args;
-#elif defined(_AWS_WIFI_H_)
-#include "iot_secure_sockets.h"
-
+#elif defined(SOCKETS_WRAPPER_H)
 typedef struct custom_transport_args {
     WIFINetworkParams_t * network_conf;
-    SocketsSockaddr_t * socket_addr;
+    const char agent_ip[16];
+    uint16_t agent_port;
 } custom_transport_args;
 #endif
 
