@@ -10,7 +10,7 @@
 
 ## Manual FSP Update
 
-- Download the latest FSP packs as zip file from the  [Renesas Github repository](https://github.com/renesas/fsp/releases). For example, version 3.5.0 can be downloaded here: [FSP_Packs_v4.4.0.zip](https://github.com/renesas/fsp/releases/download/v4.4.0/FSP_Packs_v4.4.0.zip)
+- Download the latest FSP packs as zip file from the  [Renesas Github repository](https://github.com/renesas/fsp/releases). For example, version 4.4.0 can be downloaded here: [FSP_Packs_v4.4.0.zip](https://github.com/renesas/fsp/releases/download/v4.4.0/FSP_Packs_v4.4.0.zip)
 
 ### Install Renesas FSP packs
 
