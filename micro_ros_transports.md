@@ -1,11 +1,5 @@
-<br/>
-<a>
-   <p align="center">
-      <img width="40%" src=".images/renesas_logo.gif">
-      <img width="40%" src=".images/microros_logo.png">
-   </p>
-</a>
-<br/>
+![banner](.images/banner-dark-theme.png#gh-dark-mode-only)
+![banner](.images/banner-light-theme.png#gh-light-mode-only)
 
 # micro-ROS transports for  Renesas e<sup>2</sup> studio
 
@@ -16,7 +10,7 @@ Depending on which transport is used for micro-ROS specific configurations, the 
   - [Serial UART transport](#serial-uart-transport)
   - [UDP transport (FreeRTOS + TCP)](#udp-transport-freertos--tcp)
   - [UDP transport (ThreadX + NetX)](#udp-transport-threadx--netx)
-  - [TCP WIFI transport (AWS Secure Sockets - FreeRTOS)](#tcp-wifi-transport-aws-secure-sockets---freertos)
+  - [TCP WIFI transport (AWS WiFi Sockets Wrapper - FreeRTOS)](#tcp-wifi-transport-aws-wifi-sockets-wrapper---freertos)
   - [CAN FD transport](#can-fd-transport)
 
 ## USB-CDC transport
@@ -143,7 +137,7 @@ The configuration of this transports is board dependant:
          renesas_e2_transport_read);
       ```
 
-## TCP WIFI transport (AWS Secure Sockets - FreeRTOS)
+## TCP WIFI transport (AWS WiFi Sockets Wrapper - FreeRTOS)
 
 This transport supports Renesas [Wi-Fi-Pmod-Expansion-Board](https://www.renesas.com/eu/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus/wi-fi-pmod-expansion-board-80211bgn-24g-wi-fi-pmod-expansion-board) based on Silex SX-ULPGN module.  
 Support for other wifi modules can be added to the FSP as explained on chapter `4. Adding Support for New Wi-Fi module` of this document: 
@@ -154,9 +148,19 @@ Support for other wifi modules can be added to the FSP as explained on chapter `
 1. Copy the following files to the source directory:
       - `extra_sources/microros_transports/wifi_transport_freeRTOS.c`
 
-2. Double click on the `configuration.xml` file of your project and go to the `Stacks` tab.
-3. Select `New Stack -> Networking -> AWS Secure Sockets on WiFi`.
-4. Remove the `AWS Secure Sockets TLS Support` submodule of the created module: `Right click -> Delete`.
+2. Double click on the `configuration.xml` file of your project and go to the `Components` tab.
+3. Enable the following components:
+   1. `AWS -> c_sdk -> standard -> logging`.
+   2. `Renesas -> Middleware -> all -> WiFi Common`.
+   3. `Renesas -> Middleware -> all -> AWS Silex WiFi Sockets Wrapper`.
+
+      ![image](.images/enable_wifi_module.png)
+
+3. Go to the `Stacks` tab and add a `AWS Silex WiFi Sockets Wrapper` module.
+4. Remove the `AWS Cellular/WiFi MbedTLS Bio` submodule of the created component: `Right click -> Delete`.
+
+      <img src=".images/remove_TLS.png" alt="drawing" width="1000"/>
+
 5. Enable `Common -> General -> Use Mutexes` on the micro-ROS thread properties.
 6. Configure the module reset pinout on the `rm_wifi_onchip_silex` module properties:
    1. Set `Common -> Module Reset Port` to 3.
@@ -165,7 +169,7 @@ Support for other wifi modules can be added to the FSP as explained on chapter `
    1. Enter Enable `FIFO support`, `DTC support` and `Flow control support` on `common` properties
    2. Add `DTC drivers` for Transmission and Reception:
 
-      <img src=".images/Wifi_DTC.png" alt="drawing" width="1000"/>
+      <img src=".images/Wifi_DTC.png" alt="drawing" width="800"/>
 
    3. Select the SCI port 9 on `Module g_uart0 UART (r_sci_uart) -> General -> Channel`.
    4. Go to the Pins tab and configure the SCI port and its pinout:
@@ -174,7 +178,7 @@ Support for other wifi modules can be added to the FSP as explained on chapter `
 
       *Optional: in order to set P203 and P202 as Tx/Rx first disable SPI0*
 
-   5. *Optional: To increase data throughput, increase the baud rate on `Module g_uart0 UART (r_sci_uart) -> Baud -> Baud Rate`.  
+   5. *Optional: To increase data throughput, increase the baud rate on `Module g_uart0 UART (r_sci_uart) -> Baud -> Baud Rate`.
       Values up to `460800 bauds` has been tested*
 
 8.  Save the modifications by clicking on `Generate Project Content`.
@@ -190,26 +194,18 @@ Support for other wifi modules can be added to the FSP as explained on chapter `
          };
          ```
 
-         *Notes:*  
-            - *Currently only the following security protocols are supported: `eWiFiSecurityOpen`, `eWiFiSecurityWPA` and `eWiFiSecurityWPA2`*  
+         *Notes:*
+            - *Currently only the following security protocols are supported: `eWiFiSecurityOpen`, `eWiFiSecurityWPA` and `eWiFiSecurityWPA2`*
             - *The network ssid and password length is limited to 31 characters*
 
-    2. Configure agent IP and port on a `SocketsSockaddr_t` object:
-         ```c
-         // Configure agent address
-         SocketsSockaddr_t socket_addr = {
-               .ulAddress = SOCKETS_inet_addr_quick(192, 168, 1, 93),
-               .usPort    = SOCKETS_htons(8888)
-         };
-         ```
-
-    3. Add the configuration the a `custom_transport_args` struct and pass it down to the `rmw_uros_set_custom_transport` method:
+    2. Configure agent IP and port on a `custom_transport_args` object and pass it down to the `rmw_uros_set_custom_transport` method:
 
          ```c
          // Add configuration to transport args
          custom_transport_args wifi_args = {
             .network_conf = &network_conf,
-            .socket_addr = &socket_addr
+            .agent_ip = "192.168.1.93",
+            .agent_port = 8888
          };
 
          rmw_uros_set_custom_transport(

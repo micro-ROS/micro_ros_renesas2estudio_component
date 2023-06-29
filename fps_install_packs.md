@@ -1,22 +1,16 @@
-<br/>
-<a>
-   <p align="center">
-      <img width="40%" src=".images/renesas_logo.gif">
-      <img width="40%" src=".images/microros_logo.png">
-   </p>
-</a>
-<br/>
+![banner](.images/banner-dark-theme.png#gh-dark-mode-only)
+![banner](.images/banner-light-theme.png#gh-light-mode-only)
 
 # FSP Board pack installation on Renesas e<sup>2</sup> studio
 
 ## Renesas e2 studio installer
 
-- Download the e2 studio Linux AppImage from the  [Renesas Github repository](https://github.com/renesas/fsp/releases). For example, e2 studio installer for FSP version 3.5.0 can be downloaded here: [setup_fsp_v3_5_0_e2s_v2021-10.AppImage](https://github.com/renesas/fsp/releases/download/v3.5.0/setup_fsp_v3_5_0_e2s_v2021-10.AppImage)
+- Download the e2 studio Linux AppImage from the  [Renesas Github repository](https://github.com/renesas/fsp/releases). For example, e2 studio installer for FSP version 4.4.0 can be downloaded here: [setup_fsp_v4_4_0_e2s_v2023-04.AppImage](https://github.com/renesas/fsp/releases/download/v4.4.0/setup_fsp_v4_4_0_e2s_v2023-04.AppImage)
 - Perform a Quick Install, this will automatically include the latest FSP and GNU Arm Embedded Toolchain versions.
 
 ## Manual FSP Update
 
-- Download the latest FSP packs as zip file from the  [Renesas Github repository](https://github.com/renesas/fsp/releases). For example, version 3.5.0 can be downloaded here: [FSP_Packs_v3.5.0.zip](https://github.com/renesas/fsp/releases/download/v3.5.0/FSP_Packs_v3.5.0.zip)
+- Download the latest FSP packs as zip file from the  [Renesas Github repository](https://github.com/renesas/fsp/releases). For example, version 4.4.0 can be downloaded here: [FSP_Packs_v4.4.0.zip](https://github.com/renesas/fsp/releases/download/v4.4.0/FSP_Packs_v4.4.0.zip)
 
 ### Install Renesas FSP packs
 
@@ -25,7 +19,7 @@
 
 ![image](.images/Packs_path.png)
 
-1. Extract the downloaded packs on the FSP folder path: `unzip FSP_Packs_v2.4.0.zip -d /home/username/.eclipse/com.renesas.platform_1177272026/`.
+1. Extract the downloaded packs on the FSP folder path: `unzip FSP_Packs_v4.4.0.zip -d /home/username/.eclipse/com.renesas.platform_1177272026/`.
 
 2. Now check on e<sup>2</sup> studio that the packs were detected and installed successfully:
 
