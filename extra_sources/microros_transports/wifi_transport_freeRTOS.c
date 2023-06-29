@@ -70,7 +70,7 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport) {
     BaseType_t sock_err = Sockets_Connect(&xSocket,
                            args->agent_ip,
                            args->agent_port,
-                           100,
+                           10,
                            WRITE_TIMEOUT);
 
     if (SOCKETS_ERROR_NONE != sock_err)
