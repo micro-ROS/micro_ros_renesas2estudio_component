@@ -38,6 +38,7 @@ $(INSTALL_DIR)/micro_ros_dev/install:
 	git clone -b rolling https://github.com/ament/googletest src/googletest; \
 	git clone -b rolling https://github.com/ros2/ament_cmake_ros src/ament_cmake_ros; \
 	git clone -b rolling https://github.com/ament/ament_index src/ament_index; \
+	touch src/ament_cmake_ros/rmw_test_fixture_implementation/COLCON_IGNORE; \
 	colcon build --cmake-args -DBUILD_TESTING=OFF;
 
 $(INSTALL_DIR)/micro_ros_src/src:
