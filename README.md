@@ -25,12 +25,12 @@ This package eases the integration of [micro-ROS](https://micro.ros.org/) in a [
 | --- | ------ | --------------- | ---------- |
 | [RA6M5](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus/ra6m5-200mhz-arm-cortex-m33-trustzone-highest-integration-ethernet-and-can-fd) | RA Series | [EK-RA6M5](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus/ek-ra6m5-evaluation-kit-ra6m5-mcu-group) | USB-CDC <br /> Serial UART <br /> UDP (FreeRTOS + TCP) <br /> UDP (ThreadX + NetX) <br /> TCP (AWS Secure Sockets) <br /> CAN FD |
 | [RA6T2](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus/ra6t2-240mhz-arm-cortex-m33-trustzone-high-real-time-engine-motor-control)     | RA Series | [MCK-RA6T2](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/ra-cortex-m-mcus/rtk0ema270s00020bj-mck-ra6t2-renesas-flexible-motor-control-kit-ra6t2-mcu-group) | Serial UART <br /> CAN FD |
-
+| [RA8T2](https://www.renesas.com/en/products/ra8t2)     | RA Series | [MCK-RA8T2](https://www.renesas.com/en/design-resources/boards-kits/mck-ra8t2) | UDP (FreeRTOS + TCP)                                                                                                             |
 
 ## Requirements
 
 - [Renesas e<sup>2</sup> studio](https://www.renesas.com/us/en/software-tool/e-studio) for Linux<sup>1</sup>
-- FSP v5.6.0 board packs for Renesas e<sup>2</sup> studio: [Details](fps_install_packs.md).
+- FSP v6.1.0 (backwards compatible from 5.6.0) board packs for Renesas e<sup>2</sup> studio: [Details](fps_install_packs.md).
 - GNU Arm Embedded Toolchain v10.3.1.20210824 (Other compatible toolchain may work).
 - Install `rsync`: `apt -y install rsync`
 - [Install colcon](https://colcon.readthedocs.io/en/released/user/installation.html) and dependencies, for example with:
