@@ -42,6 +42,8 @@ $(INSTALL_DIR)/micro_ros_dev/install:
 	touch src/ament_cmake_ros/rmw_test_fixture/COLCON_IGNORE; \
 	colcon build --cmake-args -DBUILD_TESTING=OFF;
 
+# TEMPORARY: ros2/rosidl is pinned to the last commit before ros2/rosidl#942, which made
+# rosidl_runtime_c depend on rosidl_buffer (C++ with exceptions). See ros2/rosidl#1002.
 $(INSTALL_DIR)/micro_ros_src/src:
 	rm -rf $(INSTALL_DIR)/micro_ros_src; \
 	mkdir $(INSTALL_DIR)/micro_ros_src; cd $(INSTALL_DIR)/micro_ros_src; \
@@ -55,6 +57,7 @@ $(INSTALL_DIR)/micro_ros_src/src:
 	git clone -b rolling https://github.com/micro-ROS/rosidl_typesupport src/rosidl_typesupport; \
 	git clone -b rolling https://github.com/micro-ROS/rosidl_typesupport_microxrcedds src/rosidl_typesupport_microxrcedds; \
 	git clone -b rolling https://github.com/ros2/rosidl src/rosidl; \
+	git -C src/rosidl reset --hard 5f4ace0288ecf942307ed62b9239ab5986884676; \
 	git clone -b rolling https://github.com/ros2/rosidl_dynamic_typesupport src/rosidl_dynamic_typesupport; \
 	git clone -b rolling https://github.com/ros2/rmw src/rmw; \
 	git clone -b rolling https://github.com/ros2/rcl_interfaces src/rcl_interfaces; \
@@ -74,6 +77,10 @@ $(INSTALL_DIR)/micro_ros_src/src:
     touch src/rclc/rclc_examples/COLCON_IGNORE; \
 	touch src/rcl/rcl_yaml_param_parser/COLCON_IGNORE; \
     touch src/ros2_tracing/lttngpy/COLCON_IGNORE; \
+	touch src/rcl_logging/rcl_logging_implementation/COLCON_IGNORE; \
+	touch src/rosidl/rosidl_buffer/COLCON_IGNORE; \
+	touch src/rosidl/rosidl_buffer_backend/COLCON_IGNORE; \
+	touch src/rosidl/rosidl_buffer_backend_registry/COLCON_IGNORE; \
 	cp -rf $(COMPONENT_DIR)/extra_packages src/extra_packages || :;
 
 
