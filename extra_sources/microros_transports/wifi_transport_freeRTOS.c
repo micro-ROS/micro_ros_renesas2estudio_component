@@ -67,10 +67,12 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport) {
     net_init = true;
 
     // Connect to agent TCP server
+    // The receive timeout is fixed here and applies to every TCP_Sockets_Recv call,
+    // keep it at 1 ms so a read never blocks longer than requested by the session
     BaseType_t sock_err = TCP_Sockets_Connect(&xSocket,
                            args->agent_ip,
                            args->agent_port,
-                           10,
+                           1,
                            WRITE_TIMEOUT);
 
     if (TCP_SOCKETS_ERRNO_NONE != sock_err)
