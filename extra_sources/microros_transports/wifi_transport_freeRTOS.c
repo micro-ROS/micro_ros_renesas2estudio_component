@@ -68,7 +68,11 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport) {
 
     // Connect to agent TCP server
     // The receive timeout is fixed here and applies to every TCP_Sockets_Recv call,
+<<<<<<< HEAD
     // keep it at 1 ms so a read never blocks longer than requested by the session.
+=======
+    // keep it at 1 ms so a read never blocks longer than requested by the session
+>>>>>>> f49d620 (Reduce WiFi transport receive timeout to 1 ms (#104))
     BaseType_t sock_err = TCP_Sockets_Connect(&xSocket,
                            args->agent_ip,
                            args->agent_port,
