@@ -32,6 +32,12 @@ typedef struct {
   tcp_states_t state;
 } tcp_receiver_t;
 
+// Number of attempts to join the WiFi network. An access point can accept the
+// association and then never start the WPA2 handshake, and WIFI_ConnectAP
+// only reports that failure after its 20 s timeout, so retry the join
+#define WIFI_CONNECT_ATTEMPTS        3
+#define WIFI_CONNECT_RETRY_DELAY_MS  1000
+
 static bool net_init = false;
 static bool wifi_init = false;
 
@@ -56,8 +62,25 @@ bool renesas_e2_transport_open(struct uxrCustomTransport * transport) {
 
     wifi_init = true;
 
-    // Connect to wifi. TODO: Check timeouts or retries
-    wifi_err = WIFI_ConnectAP(network_conf);
+    // Connect to wifi, retrying if the join fails
+    for (int attempt = 0; attempt < WIFI_CONNECT_ATTEMPTS; attempt++)
+    {
+        if (0 < attempt)
+        {
+            // A failed attempt can leave the module associated (for example if it
+            // could not get an IP address), and a new connect is refused while
+            // associated. This fails harmlessly if the module is not associated
+            (void) WIFI_Disconnect();
+            vTaskDelay(pdMS_TO_TICKS(WIFI_CONNECT_RETRY_DELAY_MS));
+        }
+
+        wifi_err = WIFI_ConnectAP(network_conf);
+
+        if (eWiFiSuccess == wifi_err)
+        {
+            break;
+        }
+    }
 
     if (eWiFiSuccess != wifi_err)
     {
