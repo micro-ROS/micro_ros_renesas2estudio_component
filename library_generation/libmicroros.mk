@@ -32,45 +32,46 @@ $(INSTALL_DIR)/toolchain.cmake: $(COMPONENT_DIR)/toolchain.cmake.in
 $(INSTALL_DIR)/micro_ros_dev/install:
 	rm -rf $(INSTALL_DIR)/micro_ros_dev; \
 	mkdir $(INSTALL_DIR)/micro_ros_dev; cd $(INSTALL_DIR)/micro_ros_dev; \
-	git clone -b rolling https://github.com/ament/ament_cmake src/ament_cmake; \
-	git clone -b rolling https://github.com/ament/ament_lint src/ament_lint; \
-	git clone -b rolling https://github.com/ament/ament_package src/ament_package; \
-	git clone -b rolling https://github.com/ament/googletest src/googletest; \
-	git clone -b rolling https://github.com/ros2/ament_cmake_ros src/ament_cmake_ros; \
-	git clone -b rolling https://github.com/ament/ament_index src/ament_index; \
+	git clone -b lyrical https://github.com/ament/ament_cmake src/ament_cmake; \
+	git clone -b lyrical https://github.com/ament/ament_lint src/ament_lint; \
+	git clone -b lyrical https://github.com/ament/ament_package src/ament_package; \
+	git clone -b lyrical https://github.com/ament/googletest src/googletest; \
+	git clone -b lyrical https://github.com/ros2/ament_cmake_ros src/ament_cmake_ros; \
+	git clone -b lyrical https://github.com/ament/ament_index src/ament_index; \
 	touch src/ament_cmake_ros/rmw_test_fixture_implementation/COLCON_IGNORE; \
 	touch src/ament_cmake_ros/rmw_test_fixture/COLCON_IGNORE; \
 	colcon build --cmake-args -DBUILD_TESTING=OFF;
 
 # TEMPORARY: ros2/rosidl is pinned to the last commit before ros2/rosidl#942, which made
 # rosidl_runtime_c depend on rosidl_buffer (C++ with exceptions). See ros2/rosidl#1002.
+# TEMPORARY: rclc comes from eProsima/rclc until ros2/rclc has a lyrical branch.
 $(INSTALL_DIR)/micro_ros_src/src:
 	rm -rf $(INSTALL_DIR)/micro_ros_src; \
 	mkdir $(INSTALL_DIR)/micro_ros_src; cd $(INSTALL_DIR)/micro_ros_src; \
 	git clone -b ros2 https://github.com/eProsima/micro-CDR src/micro-CDR; \
 	git clone -b ros2 https://github.com/eProsima/Micro-XRCE-DDS-Client src/Micro-XRCE-DDS-Client; \
-	git clone -b rolling https://github.com/micro-ROS/rcl src/rcl; \
-	git clone -b rolling https://github.com/ros2/rclc src/rclc; \
-	git clone -b rolling https://github.com/micro-ROS/rcutils src/rcutils; \
-	git clone -b rolling https://github.com/micro-ROS/micro_ros_msgs src/micro_ros_msgs; \
-	git clone -b rolling https://github.com/micro-ROS/rmw-microxrcedds src/rmw-microxrcedds; \
-	git clone -b rolling https://github.com/micro-ROS/rosidl_typesupport src/rosidl_typesupport; \
-	git clone -b rolling https://github.com/micro-ROS/rosidl_typesupport_microxrcedds src/rosidl_typesupport_microxrcedds; \
-	git clone -b rolling https://github.com/ros2/rosidl src/rosidl; \
+	git clone -b lyrical https://github.com/micro-ROS/rcl src/rcl; \
+	git clone -b lyrical https://github.com/eProsima/rclc src/rclc; \
+	git clone -b lyrical https://github.com/micro-ROS/rcutils src/rcutils; \
+	git clone -b lyrical https://github.com/micro-ROS/micro_ros_msgs src/micro_ros_msgs; \
+	git clone -b lyrical https://github.com/micro-ROS/rmw-microxrcedds src/rmw-microxrcedds; \
+	git clone -b lyrical https://github.com/micro-ROS/rosidl_typesupport src/rosidl_typesupport; \
+	git clone -b lyrical https://github.com/micro-ROS/rosidl_typesupport_microxrcedds src/rosidl_typesupport_microxrcedds; \
+	git clone -b lyrical https://github.com/ros2/rosidl src/rosidl; \
 	git -C src/rosidl reset --hard 5f4ace0288ecf942307ed62b9239ab5986884676; \
-	git clone -b rolling https://github.com/ros2/rosidl_dynamic_typesupport src/rosidl_dynamic_typesupport; \
-	git clone -b rolling https://github.com/ros2/rmw src/rmw; \
-	git clone -b rolling https://github.com/ros2/rcl_interfaces src/rcl_interfaces; \
-	git clone -b rolling https://github.com/ros2/rosidl_defaults src/rosidl_defaults; \
-	git clone -b rolling https://github.com/ros2/unique_identifier_msgs src/unique_identifier_msgs; \
-	git clone -b rolling https://github.com/ros2/common_interfaces src/common_interfaces; \
-	git clone -b rolling https://github.com/ros2/test_interface_files src/test_interface_files; \
-	git clone -b rolling https://github.com/ros2/rmw_implementation src/rmw_implementation; \
-	git clone -b rolling https://github.com/ros2/rcl_logging src/rcl_logging; \
-	git clone -b rolling https://github.com/ros2/ros2_tracing src/ros2_tracing; \
-	git clone -b rolling https://github.com/micro-ROS/micro_ros_utilities src/micro_ros_utilities; \
-	git clone -b rolling https://github.com/ros2/example_interfaces src/example_interfaces; \
-	git clone -b rolling https://github.com/ros2/rosidl_core src/rosidl_core; \
+	git clone -b lyrical https://github.com/ros2/rosidl_dynamic_typesupport src/rosidl_dynamic_typesupport; \
+	git clone -b lyrical https://github.com/ros2/rmw src/rmw; \
+	git clone -b lyrical https://github.com/ros2/rcl_interfaces src/rcl_interfaces; \
+	git clone -b lyrical https://github.com/ros2/rosidl_defaults src/rosidl_defaults; \
+	git clone -b lyrical https://github.com/ros2/unique_identifier_msgs src/unique_identifier_msgs; \
+	git clone -b lyrical https://github.com/ros2/common_interfaces src/common_interfaces; \
+	git clone -b lyrical https://github.com/ros2/test_interface_files src/test_interface_files; \
+	git clone -b lyrical https://github.com/ros2/rmw_implementation src/rmw_implementation; \
+	git clone -b lyrical https://github.com/ros2/rcl_logging src/rcl_logging; \
+	git clone -b lyrical https://github.com/ros2/ros2_tracing src/ros2_tracing; \
+	git clone -b lyrical https://github.com/micro-ROS/micro_ros_utilities src/micro_ros_utilities; \
+	git clone -b lyrical https://github.com/ros2/example_interfaces src/example_interfaces; \
+	git clone -b lyrical https://github.com/ros2/rosidl_core src/rosidl_core; \
     touch src/rosidl/rosidl_typesupport_introspection_cpp/COLCON_IGNORE; \
     touch src/ros2_tracing/test_tracetools/COLCON_IGNORE; \
     touch src/rcl_logging/rcl_logging_spdlog/COLCON_IGNORE; \

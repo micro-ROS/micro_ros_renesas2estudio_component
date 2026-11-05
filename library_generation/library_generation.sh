@@ -36,7 +36,7 @@ if [ ! -f "$BASE_PATH/libmicroros/libmicroros.a" ]; then
     ######## Add extra packages  ########
     pushd extra_packages
         rm -rf geometry2 tf2_msgs
-        git clone -b rolling https://github.com/ros2/geometry2
+        git clone -b lyrical https://github.com/ros2/geometry2
         cp -R geometry2/tf2_msgs tf2_msgs
         rm -rf geometry2
     popd
