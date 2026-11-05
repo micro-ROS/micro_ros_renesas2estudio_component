@@ -30,13 +30,14 @@ static size_t  xBlockAllocatedBit = ( ( size_t ) 1 ) << ( ( sizeof( size_t ) * h
 
 void *pvPortRealloc(void *pointer, size_t xWantedSize)
 {
-    vTaskSuspendAll();
-
+    // Handle the free case before suspending the scheduler
     if (xWantedSize == 0)
     {
         vPortFree(pointer);
         return NULL;
     }
+
+    vTaskSuspendAll();
 
     void *ptr = pvPortMalloc(xWantedSize);
     if (ptr != NULL && pointer != NULL)
